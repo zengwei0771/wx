@@ -63,39 +63,6 @@ class ProxysRequest(object):
                 self.proxys[p] = {'valid': True, 'priority': 0}
 
 
-class ProxysRequest(object):
-
-    def __init__(self, proxys):
-        self.proxys = [{
-            'http': i,
-            'valid': True
-        } for i in proxys]
-        self.valid_num = len(self.proxys)
-
-    def get(self, url, headers, timeout=20):
-        if len([i for i in self.proxys if i['valid']]) == 0:
-            logging.warn('Proxy is all invalid.')
-            return None
-
-        for proxy in self.proxys:
-            if not proxy['valid']:
-                continue
-            s = requests.Session()
-            try:
-                r = s.get(url,
-                          headers=headers,
-                          proxies={'http':proxy['http']},
-                          timeout=timeout)
-                if r.status_code == 200:
-                    return r
-            except Exception, e:
-                logging.warn('Proxy dead. %s. %s' % (proxy['http'], str(e)))
-            proxy['valid'] = False
-
-        logging.warn('Proxy is all invalid.')
-        return None
-
-
 if __name__ == '__main__':
     #print Proxys.get_proxys()
     #print Proxys.test_proxy('http://39.88.192.207:81')
