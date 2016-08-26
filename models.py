@@ -30,12 +30,15 @@ class Article(BaseModel):
     __table__ = 'article'
 
     _id = PrimaryKeyField()
-    account = ForeignKeyField(Account, on_delete='CASCADE')
-    title = CharField(max_length=256, null=False)
+    title = CharField(max_length=256, unique=True, null=False)
+    account = CharField(max_length=256, null=False)
     desc = CharField(max_length=1024)
     content = TextField(null=False)
     cover = CharField(max_length=1024)
     time = DateTimeField(null=False)
+    read = IntegerField(null=False)
+    agree = IntegerField(null=False)
+    _type = CharField(max_length=256, null=False)
 
 
 if __name__ == '__main__':

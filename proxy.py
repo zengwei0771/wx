@@ -18,14 +18,6 @@ HEADERS = {
 }
 
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    stream=sys.stdout,
-)
-
-
 class ProxysRequest(object):
 
     def __init__(self, proxys):
@@ -36,24 +28,28 @@ class ProxysRequest(object):
                 'priority': 0
             }
 
-    def get(self, url, headers, timeout=8):
+    def get(self, url, headers=HEADERS, timeout=8, allow_redirects=True):
         if len(self.proxys) == 0:
             return None
 
         ps = sorted([i for i in self.proxys.items() if i[1]['valid']],
                     key=lambda x:x[1]['priority'])
         for p in ps:
+            print url, p
             s = requests.Session()
             try:
                 r = s.get(url,
                           headers=headers,
                           proxies={'http': p[0]},
-                          timeout=timeout)
-                if r.status_code == 200:
+                          timeout=timeout,
+                          allow_redirects=allow_redirects)
+                print r.content
+                print '用户您好，您的访问过于频繁' not in r.content
+                if r.status_code == 200 and '用户您好，您的访问过于频繁' not in r.content:
                     p[1]['priority'] += 1
                     return r
             except Exception, e:
-                logging.warn('Proxy dead. %s. %s' % (p, str(e)))
+                print 'Proxy dead. %s. %s' % (p, str(e))
             p[1]['valid'] = False
         return None
 
@@ -64,6 +60,4 @@ class ProxysRequest(object):
 
 
 if __name__ == '__main__':
-    #print Proxys.get_proxys()
-    #print Proxys.test_proxy('http://39.88.192.207:81')
-    print Proxys.fetch_xici(['http://60.13.74.143:80'])
+    pass
