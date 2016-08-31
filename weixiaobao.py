@@ -6,11 +6,10 @@ import requests
 from models import db, Article
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
+from random import randint
 
 
-HEADERS = {                                                                        
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
-}
+UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 TO = 8
 
 
@@ -18,8 +17,8 @@ def pull_weixiaobao():
     db.connect()
     lastday = datetime.now() - timedelta(1)
     lastday_str = lastday.strftime('%Y-%m-%d')
-    for i in range(25):
-        r = requests.get('http://top.wxb.com/article/cat/%d/%s' % (i, lastday_str), headers=HEADERS, timeout=TO)
+    for i in range(1, 25):
+        r = requests.get('http://top.wxb.com/article/cat/%d/%s' % (i, lastday_str), headers={'User-Agent':UA}, timeout=TO)
         dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
         _type = dom.find('ul', class_='rank-detail-left-nav')\
                 .find('li', class_='active').text.strip()
@@ -38,10 +37,14 @@ def pull_weixiaobao():
                 agree = int(agree)
             else:
                 agree = int(agree[:len(agree)-1])
+            t = lastday + timedelta(seconds=randint(0, 86400))
+            print title, t
             try:
-                c = requests.get(href, headers=HEADERS, timeout=TO)
+                c = requests.get(href, headers={'User-Agent':UA}, timeout=TO)
                 cdom = BeautifulSoup(c.content, "html5lib", from_encoding="UTF-8")
                 content = cdom.find('div', id='js_content')
+                if not content:
+                    continue
                 cover = ''
                 for img in content.findAll('img'):
                     cover = img.get('data-src')
@@ -58,7 +61,7 @@ def pull_weixiaobao():
                     title=title,
                     desc=desc,
                     content=str(content),
-                    time=lastday,
+                    time=t,
                     cover=cover,
                     _type=_type,
                     read=read,
@@ -66,7 +69,6 @@ def pull_weixiaobao():
                 )
             except Exception, e:
                 print e
-                continue
     db.close()
 
 
