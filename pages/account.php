@@ -2,12 +2,8 @@
     require_once('config.php');
     require_once('function.php');
 
-    list($articles, $hasmore) = get_articles($_GET['catagory'], $_GET['sortby'], $_GET['page']);
-    $rand_articles = get_rand_articles();
+    list($account, $articles, $hasmore) = get_account($_GET['accountid'], $_GET['page']);
     $hot_accounts = get_hot_accounts();
-    if ($_GET['catagory'] and $_GET['catagory'] != 'all') {
-        $catagory_name = get_catagory_name_by_id($_GET['catagory']);
-    }
 ?>
 <html>
 <head>
@@ -29,7 +25,7 @@
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
-        window.onscroll = pagescroll('hot_read');
+        window.onscroll = pagescroll('account_detail');
     </script>
 </head>
 <body>
@@ -42,15 +38,14 @@
             <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
         </div>
         <div id="rightbar" class="rightbar">
-            <div id="hot_read" class="box">
-                <h3>推荐热点</h3>
-                <ul>
-                <?php
-                foreach($rand_articles as $ra) {
-                    echo '<li><a target="_blank" title="'.$ra->title.'" href="/barticle/'.$ra->titleid.'.html">'.$ra->title.'</a></li>';
-                }
-                ?>
-                </ul>
+            <div id="account_detail" class="box">
+                <h3>公众号信息</h3>
+                <div>
+                    <img src="http://open.weixin.qq.com/qr/code/?username=<?php echo $account->aid;?>" height="100" width="100" />
+                    <div class="account-name"><a href="/baccount/<?php echo $account->aid;?>/" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a></div>
+                    <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $account->aid;?></div>
+                    <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $account->desc;?></div>
+                </div>
             </div>
             <div class="box">
                 <h3>热门公众号</h3>
@@ -68,19 +63,8 @@
             <ul class="address">
                 <li>当前位置: 
                     <a href="/">首页</a>
-                    <?php
-                        if ($_GET['catagory'] == 'all') {
-                            if ($_GET['prefix'] == 'hotread') {
-                                echo '><a href="/hotread/" title="微信文章热门排行">热门排行</a>';
-                            } else if ($_GET['prefix'] == 'recommend') {
-                                echo '><a href="/recommend/" title="微信文章推荐阅读">推荐阅读</a>';
-                            } else if ($_GET['prefix'] == 'hotagree') {
-                                echo '><a href="/hotagree/" title="微信文章点赞热门">点赞热门</a>';
-                            }
-                        } else if ($_GET['catagory']) {
-                            echo '><a href="/catagory/'.$_GET['catagory'].'/" title="微信文章'.$catagory_name.'分类">'.$catagory_name.'</a>';
-                        }
-                    ?>
+                    >
+                    <a href="/baccount/<?php echo $account->aid;?>/" title="公众号<?php echo $account->name;?>文章"><?php echo $account->name;?></a>
                 </li>
             </ul>
             <div class="article">
@@ -92,21 +76,13 @@
                     } else {
                         $read = $a->read;
                     }
-                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.explode(' ',$a->time)[0].'</time><a class="account" href="/baccount/'.$a->account_id.'/" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
+                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->desc.'</p><footer><time>'.explode(' ',$a->time)[0].'</time><a class="account" href="/baccount/'.$account->aid.'/" title="微信公众号'.$account->name.'">@'.$account->name.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
                 }
                 ?>
                 <div class="next-page">
                     <?php
                         if ($hasmore) {
-                            $html = '<a href="';
-                            if ($_GET['prefix'] != 'none') {
-                                if ($_GET['catagory'] != 'all') {
-                                    $html .= '/catagory';
-                                }
-                                $html .= '/'.$_GET['prefix'];
-                            }
-                            $html .= '/'.($_GET['page']+1).'/">下一页</a>';
-                            echo $html;
+                            echo '<a href="/baccount/'.$account->aid.'/'.($_GET['page']+1).'/">下一页</a>';
                         } else {
                             echo '没有更多内容';
                         }

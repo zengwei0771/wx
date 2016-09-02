@@ -3,14 +3,17 @@
 
 
 import requests
-from models import db, Article
+from models import db, Article, Account
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from random import randint
+from convertutf8 import ConvertUtf8
+from wx import WX
+import time
+from config import UA, TO
 
 
-UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
-TO = 8
+URL = 'http://top.wxb.com/article/cat/%d/%s'
 
 
 def pull_weixiaobao():
@@ -18,15 +21,20 @@ def pull_weixiaobao():
     lastday = datetime.now() - timedelta(1)
     lastday_str = lastday.strftime('%Y-%m-%d')
     for i in range(1, 25):
-        r = requests.get('http://top.wxb.com/article/cat/%d/%s' % (i, lastday_str), headers={'User-Agent':UA}, timeout=TO)
+        r = requests.get(URL % (i, lastday_str), headers={'User-Agent':UA}, timeout=TO)
         dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
-        _type = dom.find('ul', class_='rank-detail-left-nav')\
-                .find('li', class_='active').text.strip()
+        catagory = dom.find('ul', class_='rank-detail-left-nav').find('li', class_='active').text.strip()
         for item in dom.find('ul', class_='rank-list-2').findAll('li'):
             item = item.find('div', class_='normal')
             title = item.find('a', class_='link-title').text.strip()
+            titleid = ConvertUtf8.convert(title)
+            t = lastday + timedelta(seconds=randint(0, 86400))
+            if Article.select().where(Article.titleid == titleid):
+                print title, t, 'existed'
+                continue
+
+            print title, t, 'inserting'
             href = item.find('a', class_='link-title').get('href')
-            account = item.find('span', class_='weixin-name').text.strip()
             read = item.find('span', class_='read-num').text.strip()
             if not read.endswith('+'):
                 read = int(read)
@@ -37,38 +45,42 @@ def pull_weixiaobao():
                 agree = int(agree)
             else:
                 agree = int(agree[:len(agree)-1])
-            t = lastday + timedelta(seconds=randint(0, 86400))
-            print title, t
-            try:
-                c = requests.get(href, headers={'User-Agent':UA}, timeout=TO)
-                cdom = BeautifulSoup(c.content, "html5lib", from_encoding="UTF-8")
-                content = cdom.find('div', id='js_content')
-                if not content:
-                    continue
-                cover = ''
-                for img in content.findAll('img'):
-                    cover = img.get('data-src')
-                    if cover.endswith('jpeg'):
-                        break
-                desc = ''
-                for line in content.text.strip().split('\n'):
-                    desc += line.strip() + ' '
-                    if len(desc) > 160:
-                        break
-                desc = desc[:400]
-                Article.create(
-                    account=account,
-                    title=title,
-                    desc=desc,
-                    content=str(content),
-                    time=t,
-                    cover=cover,
-                    _type=_type,
-                    read=read,
-                    agree = agree
+
+            arinfo = WX.article_info(href)
+            if not arinfo:
+                print 'pull article info failed'
+                continue
+
+            account = Account.select().where(Account.aid == arinfo['account_id'])
+            if not account:
+                account = Account.create(
+                    aid=arinfo['account_id'],
+                    name=arinfo['account_name'],
+                    desc=arinfo['account_desc']
                 )
-            except Exception, e:
-                print e
+            Article.create(
+                titleid=titleid,
+                title=title,
+                account=account,
+                desc=arinfo['desc'],
+                content=arinfo['content'],
+                source=href,
+                time=t,
+                cover=arinfo['cover'],
+                catagory=catagory,
+                catagoryid=ConvertUtf8.convert(catagory),
+                read=read,
+                agree=agree,
+                video=arinfo['videos'][0] if arinfo['videos'] else ''
+            )
+            for img in arinfo['imgs']:
+                Pic.create(
+                    src=img['src'],
+                    article=article,
+                    width=img['width'],
+                    height=img['height']
+                )
+        time.sleep(10)
     db.close()
 
 

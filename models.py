@@ -18,30 +18,41 @@ class BaseModel(Model):
 class Account(BaseModel):
     __table__ = 'account'
 
-    _id = CharField(primary_key=True, max_length=64, unique=True, null=False)
+    aid = CharField(primary_key=True, max_length=64)
     name = CharField(max_length=256, null=False)
     desc = CharField(max_length=1024)
-
-    count = IntegerField(default=0, null=False)
-    lastest_time = DateTimeField(null=True)
 
 
 class Article(BaseModel):
     __table__ = 'article'
 
-    _id = PrimaryKeyField()
-    title = CharField(max_length=256, unique=True, null=False)
-    account = CharField(max_length=256, null=False)
+    articleid = PrimaryKeyField()
+    titleid = CharField(unique=True, max_length=512, null=False)
+    title = CharField(max_length=1024, null=False)
+    account = ForeignKeyField(Account, on_delete='CASCADE', to_field='aid')
     desc = CharField(max_length=1024)
     content = TextField(null=False)
     cover = CharField(max_length=1024)
+    source = CharField(max_length=2014)
     time = DateTimeField(null=False)
     read = IntegerField(null=False)
     agree = IntegerField(null=False)
-    _type = CharField(max_length=256, null=False)
+    catagory = CharField(max_length=64, null=False)
+    catagoryid = CharField(max_length=64, null=False)
+    video = CharField(max_length=1024)
+
+
+class Pic(BaseModel):
+    __table__ = 'pic'
+
+    picid = PrimaryKeyField()
+    src = CharField(max_length=1024, null=False)
+    article = ForeignKeyField(Article, on_delete='CASCADE', to_field='articleid')
+    width = IntegerField(null=False)
+    height = IntegerField(null=False)
 
 
 if __name__ == '__main__':
     db.connect()
-    db.create_tables([Article])
+    db.create_tables([Account, Article, Pic])
     db.close()

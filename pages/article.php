@@ -1,18 +1,10 @@
 <?php
     require_once('config.php');
-    require_once('db.php');                                                 
+    require_once('function.php');
 
-    $sql = 'select * from article order by time desc limit 0, 40';
-    $articles = $db->getObjListBySql($sql);
-
-    $sql = 'select _type, count(*) as c from article group by _type order by c desc';
-    $catagorys = $db->getObjListBySql($sql);
-
-    $sql = 'select * from article order by `read` desc limit 0, 15';
-    $hot_reads = $db->getObjListBySql($sql);
-
-    $sql = 'select account, sum(`read`) as allread, sum(agree) as allagree from article group by account order by allagree desc limit 0, 15';
-    $hot_accounts = $db->getObjListBySql($sql);
+    $article = get_article($_GET['titleid']);
+    $account_articles  = get_account_articles($article->account_id);
+    $more_articles = get_more_articles();
 ?>
 <html>
 <head>
@@ -20,10 +12,10 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜--<?php echo $site_name;?></title>
+    <title><?php echo $article->title;?>--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜" />
-    <meta name="description" content="" />
+    <meta name="keywords" content="<?php echo $article->title;?>" />
+    <meta name="description" content="<?php echo $article->title;?>;<?php echo $article->desc;?>" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="icon" type="image/x-icon" /> 
@@ -33,56 +25,43 @@
 
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
+    <script>
+        window.onscroll = pagescroll('account_detail');
+    </script>
 </head>
 <body>
-    <?php echo $_GET['title'].'1';?>
     <div class="head_wrap">
-        <div class="head">
-            <div class="left">
-                <a href="http://<?php echo $site_domain;?>/" title="<?php echo $site_name;?>">
-                    <img src="/static/longlogo.png" height="90" width="180" alt="<?php echo $site_name;?>"></img>
-                </a>
-            </div>
-            <div class="right">
-                <ul class="navi">
-                <?php
-                foreach(array_reverse(array_slice($catagorys, 0, 10)) as $c) {
-                    echo '<li><a href="/catagory/'.$c->_type.'/" title="'.$c->_type.'">'.$c->_type.'</a><img src="/static/navi-split.png"/></li>';
-                }
-                ?>
-                <li></li>
-                </ul>
-            </div>
-        </div>
+        <?php include 'head.php';?>
     </div>
     <div class="body">
         <div class="leftbar">
-            <ul>
-                <li><a href="/hotread/" title="微信文章热门排行">热门排行</a></li>
-                <li><a href="/recommend/" title="推荐文章阅读">推荐阅读</a></li>
-                <li><a href="/hotagree/" title="微信文章点赞排行榜">点赞热门</a></li>
-                <li><a href="/lastest/" title="最新收录文章">最新发布</a></li>
-            </ul>
+            <ul><?php include 'leftnavi.php';?></ul>
             <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
         </div>
         <div id="rightbar" class="rightbar">
-            <div id="hot_read" class="box">
-                <h3>热门阅读</h3>
+            <div id="account_detail" class="box">
+                <h3>公众号信息</h3>
+                <div>
+                    <img src="http://open.weixin.qq.com/qr/code/?username=<?php echo $article->aid;?>" height="100" width="100" />
+                    <div class="account-name"><a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a></div>
+                    <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $article->aid;?></div>
+                    <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $article->account_desc;?></div>
+                </div>
+                <h3>其他文章</h3>
                 <ul>
                 <?php
-                foreach($hot_reads as $hr) {
-                    echo '<li><a title="'.$hr->title.'" href="/article/'.$hr->title.'.html">'.$hr->title.'</a></li>';
+                foreach($account_articles as $aa) {
+                    echo '<li><a target="_blank" title="'.$aa->title.'" href="/barticle/'.$aa->titleid.'.html">'.$aa->title.'</a></li>';
                 }
                 ?>
                 </ul>
             </div>
-            <div class="box">
-                <h3>热门公众号</h3>
-                <label class="hot-account-title"><span>公众号</span><span>阅读</span><span>点赞</span></label>
-                <ul class="hot-account-list">
+            <div id="" class="box">
+                <h3>随机推荐</h3>
+                <ul>
                 <?php
-                foreach($hot_accounts as $ha) {
-                    echo '<li><a title="'.$ha->account.'" href="/account/'.$hr->account.'/"><span>'.$ha->account.'</span><span>'.$ha->allread.'</span><span>'.$ha->allagree.'</span></a></li>';
+                foreach($more_articles as $ma) {
+                    echo '<li><a target="_blank" title="'.$ma->title.'" href="/barticle/'.$ma->titleid.'.html">'.$ma->title.'</a></li>';
                 }
                 ?>
                 </ul>
@@ -90,23 +69,21 @@
         </div>
         <div class="content">
             <ul class="address">
-                <li>当前位置: <a href="/">首页</a></li>
+                <li>当前位置: 
+                    <a href="/">首页</a>
+                    >
+                    <a href="/catagory/<?php echo $article->catagoryid;?>/" title="<?php echo $article->catagory;?>"><?php echo $article->catagory;?></a>
+                    >
+                    <a href="/barticle/<?php echo $article->titleid;?>.html" title="<?php echo $article->title;?>"><?php echo $article->title;?></a>
+                </li>
             </ul>
-            <div class="article">
-                <?php
-                foreach($articles as $a) {
-                    $arr = explode('/', $a->cover);
-                    if ($a->read == 100000) {
-                        $read = '100000+';
-                    } else {
-                        $read = $a->read;
-                    }
-                    echo '<article><a target="_blank" title="'.$a->title.'" href="/article/'.$a->title.'.html" /><script>window.img'.$a->_id.'=\'<img id="img'.$a->_id.'" src="'.$a->cover.'" height="144" width="180" />\';document.write("<iframe id=\'iframe'.$a->_id.'\' src=\'javascript:parent.img'.$a->_id.';\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\'></iframe>");</script></a><h2><a href="/article/'.$a->title.'.html">'.$a->title.'</a></h2><p>'.$a->desc.'</p><footer><time>'.explode(' ',$a->time)[0].'</time><a class="account" href="/account/'.$a->account.'/">@'.$a->account.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
-                }
-                ?>
-                <div class="next-page">
-                    <a href="/all/2/">下一页</a>
-                </div>
+            <div id="article_content">
+                <h2><?php echo $article->title;?></h2>
+                <article >
+                    <?php
+                        echo $article->content;
+                    ?>
+                </article>
             </div>
         </div>
         <div id="gotop">
