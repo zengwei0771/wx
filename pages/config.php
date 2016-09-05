@@ -1,6 +1,6 @@
 <?php
 
-$beian = '辽ICP备13012918号-1';
+$beian = '鲁ICP备14005400号-1';
 $site_domain = 'www.weixinbay.com';
 $m_site_domain = 'm.weixinbay.com';
 $site_name = '微信湾';
