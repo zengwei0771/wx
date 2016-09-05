@@ -34,18 +34,22 @@
     function get_catagorys() {
         global $db;
         $last7day = date("Y-m-d", strtotime("-7 day"));
-        $sql = 'select `catagoryid`, `catagory`, sum(`read`) as s from `article` where `time` > "'.$last7day.'" group by `catagoryid`, `catagory` order by s desc';
+        $sql = 'select `catagoryid`, `catagory`, count(*) as c from `article` where `time` > "'.$last7day.'" group by `catagoryid`, `catagory` order by c desc';
         return $db->getObjListBySql($sql);
     }
 
     function get_rand_articles() {
         global $db;
-        $lastday = date("Y-m-d", strtotime("-1 day"));
+        $lastday = date("Y-m-d", strtotime("-3 day"));
         $sql = 'select * from article where `time` > "'.$lastday.'"';
         $data = $db->getObjListBySql($sql);
         $result = Array();
-        $dist = count($data) / 15;
-        for($i = 0; $i < count($data); $i+=$dist) {
+        if (count($data) > 15) {
+            $dist = count($data) / 15;
+        } else {
+            $dist = 1;
+        }
+        for($i = $dist; $i < count($data); $i+=$dist) {
             array_push($result, $data[$i]);
         }
         return $result;
@@ -53,7 +57,8 @@
 
     function get_hot_accounts() {
         global $db;
-        $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid group by account_id order by allagree desc limit 0, 15';
+        $last7day = date("Y-m-d", strtotime("-7 day"));
+        $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `time`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 15';
         return $db->getObjListBySql($sql);
     }
 
@@ -66,7 +71,7 @@
             header('HTTP/1.1 404 Not Found');
             header("status: 404 Not Found");
             include("404.php");
-            exit();
+            exit(1);
         }
         return $data[0];
     }
@@ -113,5 +118,35 @@
             exit();
         }
         return $article[0]->catagory;
+    }
+
+    function get_videos($page) {
+        global $db;
+        $cpp = 5;
+        $sql = 'select count(*) as c from article where `video` != ""';
+        $c = $db->getObjListBySql($sql)[0]->c;
+        $hasmore = $c > $page*$cpp;
+
+        $sql = 'select * from article where `video` != "" order by `time` desc';
+        $start = ($page-1) * $cpp;
+        $sql .= ' limit '.$start.', '.$cpp;
+        return array($db->getObjListBySql($sql), $hasmore);
+    }
+
+    function get_other_videos() {
+        global $db;
+        $lastday = date("Y-m-d", strtotime("-3 day"));
+        $sql = 'select * from article where `time` > "'.$lastday.'" and `video` != ""';
+        $data = $db->getObjListBySql($sql);
+        $result = Array();
+        if (count($data) > 15) {
+            $dist = count($data) / 15;
+        } else {
+            $dist = 1;
+        }
+        for($i = $dist; $i < count($data); $i+=$dist) {
+            array_push($result, $data[$i]);
+        }
+        return $result;
     }
 ?>

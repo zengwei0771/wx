@@ -80,7 +80,7 @@ ul.navi > li > img {
     padding-top: 120px;
     width: 1200px;
     display: inline-block;
-    min-height: 800px;
+    min-height: 600px;
 }
 .leftbar {
     width: 160px;
@@ -128,11 +128,6 @@ ul.navi > li > img {
     font-size: 11px;
 }
 
-.content {
-    width: 640px;
-    margin: 0 0 0 180px;
-    float: left;
-}
 ul.address {
     height: 30px;
     line-height: 30px;
@@ -159,6 +154,11 @@ ul.address li a {
 }
 
 
+.content {
+    width: 640px;
+    margin: 0 0 0 180px;
+    float: left;
+}
 .article > article {
     position: relative;
     padding: 20px 0;
@@ -251,11 +251,11 @@ ul.address li a {
 .article > article > footer > a.account:hover {
     color: #62b934;
 }
-.article > .next-page {
+.next-page {
     margin: 20px;
     color: gray;
 }
-.article > .next-page > a {
+.next-page > a {
     color: #62b934;
 }
 
@@ -342,7 +342,7 @@ ul.address li a {
 
 #gotop {
     position: fixed;
-    right: 20;
+    right: 20px;
     top: 60%;
     z-index: 30;
     width: 30px;
@@ -471,4 +471,31 @@ ul.address li a {
     font-size: 13px;
     color: gray;
     line-height: 13px;
+}
+
+
+.video-wrap {
+}
+.video {
+    width: 640px;
+    height: 560px;
+    margin: 20px 0 10px 0;
+    display: inline-block;
+    border-bottom: 1px solid #eaeaea;
+}
+.video a {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 8px;
+    font-family: monospace;
+    font-size: 20px;
+    color: black;
+    font-weight: bolder;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.video a:hover {
+    color: #62b934;
 }

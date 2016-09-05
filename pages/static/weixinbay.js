@@ -23,3 +23,14 @@ function pagescroll(box) {
 function goTop() {
     $('html,body').animate({scrollTop:0}, 500);
 }
+
+function video_load_next() {
+    if ($('.next-page a').length > 0) {
+        var href = $('.next-page a').attr('part-href');
+        console.log(href);
+        $('.next-page').html('加载中。。。');
+        $.get(href, function(ret) {
+            $('.next-page').replaceWith(ret);
+        });
+    }
+}

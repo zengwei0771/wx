@@ -1,8 +1,3 @@
-<?php
-    require_once('config.php');
-    require_once('function.php');
-    $catagorys = get_catagorys();
-?>
 <div class="head">
     <div class="left">
         <a href="http://<?php echo $site_domain;?>/" title="<?php echo $site_name;?>">

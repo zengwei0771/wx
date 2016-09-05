@@ -6,7 +6,7 @@ from peewee import *
 from datetime import datetime
 
 
-db = MySQLDatabase('wx', host='127.0.0.1', user='root', passwd='12qwaszx', charset='utf8mb4')
+db = MySQLDatabase('wx', host='127.0.0.1', user='root', passwd='12qwaszx', charset='utf8')
 
 
 class BaseModel(Model):
@@ -29,7 +29,7 @@ class Article(BaseModel):
     articleid = PrimaryKeyField()
     titleid = CharField(unique=True, max_length=512, null=False)
     title = CharField(max_length=1024, null=False)
-    account = ForeignKeyField(Account, on_delete='CASCADE', to_field='aid')
+    account = ForeignKeyField(Account, to_field='aid')
     desc = CharField(max_length=1024)
     content = TextField(null=False)
     cover = CharField(max_length=1024)
@@ -47,7 +47,7 @@ class Pic(BaseModel):
 
     picid = PrimaryKeyField()
     src = CharField(max_length=1024, null=False)
-    article = ForeignKeyField(Article, on_delete='CASCADE', to_field='articleid')
+    article = ForeignKeyField(Article, to_field='articleid')
     width = IntegerField(null=False)
     height = IntegerField(null=False)
 

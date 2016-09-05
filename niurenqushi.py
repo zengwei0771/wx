@@ -10,6 +10,7 @@ from random import randint
 from convertutf8 import ConvertUtf8
 from wx import WX
 from config import UA, TO
+import time
 
 
 URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize=500&categoryid=0'
@@ -20,18 +21,28 @@ def pull():
     today = datetime.now().date()
     for page in range(1, 6):
         url = URL % page
-        r = requests.get(url, headers={'User-Agent':UA}, timeout=TO).json()
+        r = None
+        for retry in range(3):
+            try:
+                r = requests.get(url, headers={'User-Agent':UA}, timeout=TO).json()
+                break
+            except Exception, e:
+                print e
+                time.sleep(30)
+        if r is None:
+            continue
         for item in r['item']:
             t = datetime.strptime(item['AddTime'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
             if t.date() < today - timedelta(1):
                 return
 
-            titleid = ConvertUtf8.convert(item['Title'])
+            title = WX.filter_emoji(item['Title'])
+            titleid = ConvertUtf8.convert(title)
             if Article.select().where(Article.titleid == titleid):
-                print item['Title'], t, 'existed'
+                print title, t, 'existed'
                 continue
 
-            print item['Title'], t, 'inserting'
+            print title, t, 'inserting'
             arinfo = WX.article_info(item['SourceUrl'])
             if not arinfo:
                 print 'pull article info failed', item['SourceUrl']
@@ -47,9 +58,9 @@ def pull():
             read = item['ViewCount'] + randint(0, 3000)
             article = Article.create(
                 titleid=titleid,
-                title=item['Title'],
+                title=title,
                 account=account,
-                desc=item['Summary'],
+                desc=WX.filter_emoji(item['Summary']),
                 content=arinfo['content'],
                 source=item['SourceUrl'],
                 time=t,

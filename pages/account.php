@@ -4,17 +4,20 @@
 
     list($account, $articles, $hasmore) = get_account($_GET['accountid'], $_GET['page']);
     $hot_accounts = get_hot_accounts();
+
+    $catagorys = get_catagorys();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜--<?php echo $site_name;?></title>
+    <title>微信文章精选,<?php echo $account->name;?>文章,热门公众号文章,原创文章,热门微信文章排行榜--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜" />
-    <meta name="description" content="" />
+    <meta name="keywords" content="微信文章精选,<?php echo $account->name;?>文章,热门公众号文章,原创文章,热门微信文章排行榜" />
+    <meta name="description" content="微信公众号<?php echo $account->name;?>文章。<?php echo $account->desc;?>" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="icon" type="image/x-icon" /> 
@@ -34,15 +37,22 @@
     </div>
     <div class="body">
         <div class="leftbar">
-            <ul><?php include 'leftnavi.php';?></ul>
-            <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
+            <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
             <div id="account_detail" class="box">
                 <h3>公众号信息</h3>
                 <div>
+                    <?php if($account->aid){?>
                     <img src="http://open.weixin.qq.com/qr/code/?username=<?php echo $account->aid;?>" height="100" width="100" />
-                    <div class="account-name"><a href="/baccount/<?php echo $account->aid;?>/" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a></div>
+                    <?php }?>
+                    <div class="account-name">
+                    <?php if($account->aid){?>
+                        <a href="/baccount/<?php echo $account->aid;?>/" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a>
+                    <?php }else{?>
+                        <a href="" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a>
+                    <?php }?>
+                    </div>
                     <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $account->aid;?></div>
                     <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $account->desc;?></div>
                 </div>
@@ -53,7 +63,11 @@
                 <ul class="hot-account-list">
                 <?php
                 foreach($hot_accounts as $ha) {
-                    echo '<li><a title="'.$ha->account_name.'" href="/baccount/'.$ha->aid.'/"><span>'.$ha->account_name.'</span><span>'.$ha->allread.'</span><span>'.$ha->allagree.'</span></a></li>';
+                    echo '<li><a title="'.$ha->account_name.'" href="';
+                    if ($ha->aid) {
+                        echo '/baccount/'.$ha->aid.'/';
+                    }
+                    echo '"><span>'.$ha->account_name.'</span><span>'.$ha->allread.'</span><span>'.$ha->allagree.'</span></a></li>';
                 }
                 ?>
                 </ul>

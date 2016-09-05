@@ -8,17 +8,26 @@
     if ($_GET['catagory'] and $_GET['catagory'] != 'all') {
         $catagory_name = get_catagory_name_by_id($_GET['catagory']);
     }
+
+    if ($_GET['catagory'] and $_GET['catagory'] != 'all') {
+        $keywords = '微信文章精选,'.$catagory_name.','.$catagory_name.'微信文章'.','.$catagory_name.'原创文章,微信热文精选,微信文摘,微信文章大全,微信公众平台,微信文章,微信文章怎么写,微信文章哪里找,微信公众平台,微信营销,伤感文章,微信段子';
+    } else {
+        $keywords = '微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜,微信热文精选,微信文摘,微信文章大全,微信公众平台,微信文章,微信文章怎么写,微信文章哪里找,微信公众平台,微信营销,伤感文章,微信段子';
+    }
+
+    $catagorys = get_catagorys();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Cache-Control" content="no-transform" />
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜--<?php echo $site_name;?></title>
+    <title>微信文章精选,热门公众号文章,原创文章,微信段子,微信视频--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="微信文章精选,热门公众号文章,原创文章,热门微信文章排行榜" />
-    <meta name="description" content="" />
+    <meta name="keywords" content="<?php echo $keywords;?>" />
+    <meta name="description" content="最全的微信文章，最新的微信段子，最火的微信视频，最牛的微信营销案例，最美的微信深度美文，最具情怀的微信伤感文章，最具观点的微信原创文章。聚合内容涉及精选<?php foreach($catagorys as $c) {echo ','.$c->catagory;}?>等。" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="icon" type="image/x-icon" /> 
@@ -38,8 +47,7 @@
     </div>
     <div class="body">
         <div class="leftbar">
-            <ul><?php include 'leftnavi.php';?></ul>
-            <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
+            <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
             <div id="hot_read" class="box">
@@ -58,7 +66,11 @@
                 <ul class="hot-account-list">
                 <?php
                 foreach($hot_accounts as $ha) {
-                    echo '<li><a title="'.$ha->account_name.'" href="/baccount/'.$ha->aid.'/"><span>'.$ha->account_name.'</span><span>'.$ha->allread.'</span><span>'.$ha->allagree.'</span></a></li>';
+                    echo '<li><a title="'.$ha->account_name.'" href="';
+                    if ($ha->aid) {
+                        echo '/baccount/'.$ha->aid.'/';
+                    }
+                    echo '"><span>'.$ha->account_name.'</span><span>'.$ha->allread.'</span><span>'.$ha->allagree.'</span></a></li>';
                 }
                 ?>
                 </ul>
@@ -92,7 +104,11 @@
                     } else {
                         $read = $a->read;
                     }
-                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.explode(' ',$a->time)[0].'</time><a class="account" href="/baccount/'.$a->account_id.'/" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
+                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.explode(' ',$a->time)[0].'</time><a class="account" href="';
+                    if ($a->account_id) {
+                        echo '/baccount/'.$a->account_id.'/';
+                    }
+                    echo '" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
                 }
                 ?>
                 <div class="next-page">

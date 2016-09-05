@@ -5,7 +5,10 @@
     $article = get_article($_GET['titleid']);
     $account_articles  = get_account_articles($article->account_id);
     $more_articles = get_more_articles();
+
+    $catagorys = get_catagorys();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Cache-Control" content="no-transform" />
@@ -14,8 +17,8 @@
 
     <title><?php echo $article->title;?>--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="<?php echo $article->title;?>" />
-    <meta name="description" content="<?php echo $article->title;?>;<?php echo $article->desc;?>" />
+    <meta name="keywords" content="<?php echo $article->account_name.','.$article->aid.','.$article->title;?>" />
+    <meta name="description" content="<?php echo $article->title.','.$article->account_name.';'.$article->article_desc;?>" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="icon" type="image/x-icon" /> 
@@ -35,15 +38,22 @@
     </div>
     <div class="body">
         <div class="leftbar">
-            <ul><?php include 'leftnavi.php';?></ul>
-            <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
+            <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
             <div id="account_detail" class="box">
                 <h3>公众号信息</h3>
                 <div>
+                    <?php if($article->aid){?>
                     <img src="http://open.weixin.qq.com/qr/code/?username=<?php echo $article->aid;?>" height="100" width="100" />
-                    <div class="account-name"><a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a></div>
+                    <?php }?>
+                    <div class="account-name">
+                    <?php if($article->aid){?>
+                        <a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a>
+                    <?php }else{?>
+                        <a href="" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a>
+                    <?php }?>
+                    </div>
                     <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $article->aid;?></div>
                     <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $article->account_desc;?></div>
                 </div>

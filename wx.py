@@ -40,12 +40,12 @@ class WX():
 
             content, videos, imgs = WX.content_handle(cdom, contentnode)
             return {
-                'account_name': account_name,
+                'account_name': WX.filter_emoji(account_name),
                 'account_id': account_id,
-                'account_desc': account_desc,
+                'account_desc': WX.filter_emoji(account_desc),
                 'cover': cover,
-                'content': content,
-                'desc': desc[:400],
+                'content': WX.filter_emoji(content),
+                'desc': WX.filter_emoji(desc[:400]),
                 'videos': videos,
                 'imgs': imgs
             }
@@ -62,7 +62,7 @@ class WX():
             new_node.append(script_node)
             src = img.get('data-src') if img.get('data-src') else (img.get('src') if img.get('src') else (img.get('data-data-src') if img.get('data-data-src') else ''))
             try:
-                if img['width'] and img['width'] != 'auto':
+                if img.get('width') and img['width'] != 'auto':
                     if img['width'].endswith('px'):
                         width = int(img['width'][:len(img['width'])-2])
                     else:
@@ -102,9 +102,20 @@ class WX():
 
             if not iframe.get('vidtype') and iframe.get('data-vidtype'):
                 iframe['vidtype'] = iframe['data-vidtype']
-        content = re.sub('url\("http://mmbiz.qpic.cn/mmbiz/yqVAqoZvDibHXI5ekoKR1icA9n2tIN2MafRz4ZMlbZ9VJIPyHVvA3622V9M4opp0KibWG6F78HdcHOABQbic1krfPw/0?wx_fmt=jpeg")', 'url("/static/white.jpg")', str(node))
-        content = re.sub('background-image: ?url\(".+?"\)', 'background-image: url("/static/white.jpg")', str(node))
+        content = re.sub('background-image: ?url\(.+?\);?', '', str(node))
         return content, videos, imgs
+
+    @staticmethod
+    def filter_emoji(desstr, restr=''):  
+        ''''' 
+        过滤表情 
+        '''  
+        desstr = desstr.decode('utf8')
+        try:  
+            co = re.compile(u'[\U00010000-\U0010ffff]')  
+        except re.error:  
+            co = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')  
+        return co.sub(restr, desstr)
 
 
 if __name__ == '__main__':

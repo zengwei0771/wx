@@ -3,7 +3,7 @@
 
 
 import requests
-from models import db, Article, Account
+from models import db, Article, Account, Pic
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from random import randint
@@ -21,12 +21,22 @@ def pull_weixiaobao():
     lastday = datetime.now() - timedelta(1)
     lastday_str = lastday.strftime('%Y-%m-%d')
     for i in range(1, 25):
-        r = requests.get(URL % (i, lastday_str), headers={'User-Agent':UA}, timeout=TO)
+        r = None
+        for retry in range(3):
+            try:
+                r = requests.get(URL % (i, lastday_str), headers={'User-Agent':UA}, timeout=TO)
+                break
+            except Exception, e:
+                print e
+                time.sleep(30)
+        if r is None:
+            continue
         dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
         catagory = dom.find('ul', class_='rank-detail-left-nav').find('li', class_='active').text.strip()
         for item in dom.find('ul', class_='rank-list-2').findAll('li'):
             item = item.find('div', class_='normal')
             title = item.find('a', class_='link-title').text.strip()
+            title = WX.filter_emoji(title)
             titleid = ConvertUtf8.convert(title)
             t = lastday + timedelta(seconds=randint(0, 86400))
             if Article.select().where(Article.titleid == titleid):
@@ -58,7 +68,7 @@ def pull_weixiaobao():
                     name=arinfo['account_name'],
                     desc=arinfo['account_desc']
                 )
-            Article.create(
+            article = Article.create(
                 titleid=titleid,
                 title=title,
                 account=account,
