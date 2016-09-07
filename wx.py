@@ -6,7 +6,7 @@ import requests
 import sys
 sys.setrecursionlimit(10000)
 from bs4 import BeautifulSoup
-from config import UA, TO
+from common import UA, TO
 import re
 
 

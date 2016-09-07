@@ -10,7 +10,7 @@ from random import randint
 from convertutf8 import ConvertUtf8
 from wx import WX
 import time
-from config import UA, TO
+from common import UA, TO, write_content
 
 
 URL = 'http://top.wxb.com/article/cat/%d/%s'
@@ -73,7 +73,7 @@ def pull_weixiaobao():
                 title=title,
                 account=account,
                 desc=arinfo['desc'],
-                content=arinfo['content'],
+                content='',
                 source=href,
                 time=t,
                 cover=arinfo['cover'],
@@ -83,6 +83,7 @@ def pull_weixiaobao():
                 agree=agree,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
+            write_content(titleid, t, arinfo['content'])
             for img in arinfo['imgs']:
                 Pic.create(
                     src=img['src'],

@@ -91,7 +91,8 @@
                 <h2><?php echo $article->title;?></h2>
                 <article >
                     <?php
-                        echo $article->content;
+                        $time_strs = explode(' ', $article->time);
+                        include 'contents/'.$time_strs[0].'/'.$article->titleid.'.html';
                     ?>
                 </article>
             </div>

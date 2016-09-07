@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 from random import randint
 from convertutf8 import ConvertUtf8
 from wx import WX
-from config import UA, TO
 import time
+from common import UA, TO, write_content
 
 
 URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize=500&categoryid=0'
@@ -19,7 +19,7 @@ URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize
 def pull():
     db.connect()
     today = datetime.now().date()
-    for page in range(1, 6):
+    for page in range(1, 2):
         url = URL % page
         r = None
         for retry in range(3):
@@ -61,7 +61,7 @@ def pull():
                 title=title,
                 account=account,
                 desc=WX.filter_emoji(item['Summary']),
-                content=arinfo['content'],
+                content='',
                 source=item['SourceUrl'],
                 time=t,
                 cover=item['Pic'],
@@ -71,6 +71,7 @@ def pull():
                 agree=read*0.02+randint(0, 1000)*0.005,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
+            write_content(titleid, t, arinfo['content'])
             for img in arinfo['imgs']:
                 Pic.create(
                     src=img['src'],
