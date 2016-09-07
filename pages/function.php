@@ -33,14 +33,14 @@
 
     function get_catagorys() {
         global $db;
-        $last7day = date("Y-m-d", strtotime("-7 day"));
+        $last7day = date("Y-m-d", strtotime("-3 day"));
         $sql = 'select `catagoryid`, `catagory`, count(*) as c from `article` where `time` > "'.$last7day.'" group by `catagoryid`, `catagory` order by c desc';
         return $db->getObjListBySql($sql);
     }
 
     function get_rand_articles() {
         global $db;
-        $lastday = date("Y-m-d", strtotime("-3 day"));
+        $lastday = date("Y-m-d", strtotime("-1 day"));
         $sql = 'select * from article where `time` > "'.$lastday.'"';
         $data = $db->getObjListBySql($sql);
         $result = Array();
@@ -57,7 +57,7 @@
 
     function get_hot_accounts() {
         global $db;
-        $last7day = date("Y-m-d", strtotime("-7 day"));
+        $last7day = date("Y-m-d", strtotime("-3 day"));
         $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `time`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 15';
         return $db->getObjListBySql($sql);
     }
