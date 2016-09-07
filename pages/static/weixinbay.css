@@ -426,6 +426,11 @@ ul.address li a {
     margin: 0 0 14px 0;
     text-align: center;
 }
+#article_content > span {
+    color: #62b944;
+    font-size: 14px;
+    font-family: monospace;
+}
 #article_content > article {
     padding-top: 20px;
     line-height: 24px;

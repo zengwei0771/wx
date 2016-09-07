@@ -30,6 +30,11 @@
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         window.onscroll = pagescroll('account_detail');
+        $(function() {
+            setTimeout(function() {
+                $.post('/daction/read/<?php echo $article->titleid;?>');
+            }, 3000);
+        });
     </script>
 </head>
 <body>
@@ -89,6 +94,7 @@
             </ul>
             <div id="article_content">
                 <h2><?php echo $article->title;?></h2>
+                <span><?php echo $article->time;?></span>
                 <article >
                     <?php
                         $time_strs = explode(' ', $article->time);

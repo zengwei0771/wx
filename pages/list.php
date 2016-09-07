@@ -43,6 +43,15 @@
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         window.onscroll = pagescroll('hot_read');
+        function agree(self) {
+            if ($(self).attr('hasagree') == undefined) {
+                $(self).attr('hasagree', 'hasagree');
+                $.post('/daction/agree/' + $(self).attr('titleid'), function(ret){
+                    $(self).removeAttr('hasagree');
+                });
+                $(self).children('span').text(Number($(self).children('span').text())+1);
+            }
+        }
     </script>
 </head>
 <body>
@@ -105,16 +114,11 @@
                 <?php
                 foreach($articles as $a) {
                     $arr = explode('/', $a->cover);
-                    if ($a->read == 100000) {
-                        $read = '100000+';
-                    } else {
-                        $read = $a->read;
-                    }
                     echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.$a->time.'</time><a class="account" href="';
                     if ($a->account_id) {
                         echo '/baccount/'.$a->account_id.'/';
                     }
-                    echo '" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$read.')</span><a class="agree" href="javascript:void(0);"><img src="/static/muzhi.svg"/>'.$a->agree.'</a></footer></article>';
+                    echo '" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$a->read.')</span><a class="agree" href="javascript:void(0);" onclick="agree(this)" titleid="'.$a->titleid.'"><img src="/static/muzhi.svg"/><span>'.$a->agree.'</span></a></footer></article>';
                 }
                 ?>
                 <div class="next-page">
