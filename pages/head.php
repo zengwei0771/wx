@@ -8,7 +8,11 @@
         <ul class="navi">
         <?php
         foreach(array_reverse(array_slice($catagorys, 0, 10)) as $c) {
-            echo '<li><a href="/catagory/'.$c->catagoryid.'/" title="'.$c->catagory.'">'.$c->catagory.'</a><img src="/static/navi-split.png"/></li>';
+            echo '<li><a href="/catagory/'.$c->catagoryid.'/" title="'.$c->catagory.'"';
+            if ($c->catagoryid == $_GET['catagory']) {
+                echo ' class="active"';
+            }
+            echo '>'.$c->catagory.'</a><img src="/static/navi-split.png"/></li>';
         }
         foreach(array_slice($catagorys, 10) as $c) {
             echo '<li class="hide"><a href="/catagory/'.$c->catagoryid.'/" title="'.$c->catagory.'">'.$c->catagory.'</a><img src="/static/navi-split.png"/></li>';

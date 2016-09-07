@@ -2,7 +2,11 @@
     require_once('config.php');
     require_once('function.php');
 
-    list($articles, $hasmore) = get_articles($_GET['catagory'], $_GET['sortby'], $_GET['page']);
+    if ($_GET['q']) {
+        list($articles, $hasmore) = search_articles($_GET['q'], $_GET['page']);
+    } else {
+        list($articles, $hasmore) = get_articles($_GET['catagory'], $_GET['sortby'], $_GET['page']);
+    }
     $rand_articles = get_rand_articles();
     $hot_accounts = get_hot_accounts();
     if ($_GET['catagory'] and $_GET['catagory'] != 'all') {
@@ -88,6 +92,8 @@
                                 echo '><a href="/recommend/" title="微信文章推荐阅读">推荐阅读</a>';
                             } else if ($_GET['prefix'] == 'hotagree') {
                                 echo '><a href="/hotagree/" title="微信文章点赞热门">点赞热门</a>';
+                            } else if ($_GET['q']) {
+                                echo '><a href="/?'.$_GET['q'].'" title="微信文章点赞热门">搜索"'.$_GET['q'].'"</a>';
                             }
                         } else if ($_GET['catagory']) {
                             echo '><a href="/catagory/'.$_GET['catagory'].'/" title="微信文章'.$catagory_name.'分类">'.$catagory_name.'</a>';
@@ -121,7 +127,11 @@
                                 }
                                 $html .= '/'.$_GET['prefix'];
                             }
-                            $html .= '/'.($_GET['page']+1).'/">下一页</a>';
+                            $html .= '/'.($_GET['page']+1).'/';
+                            if ($_GET['q']) {
+                                $html .= '?q='.$_GET['q'];
+                            }
+                            $html .= '">下一页</a>';
                             echo $html;
                         } else {
                             echo '没有更多内容';

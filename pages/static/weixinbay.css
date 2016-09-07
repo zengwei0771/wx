@@ -71,6 +71,12 @@ ul.navi > li > a {
     overflow: hidden;
     white-space: nowrap;
 }
+ul.navi > li > a.active {
+    background-image: -webkit-gradient(linear, 0 0, 0 bottom, from(rgb(40, 20, 40)), to(rgb(96, 213, 56)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bolder;
+}
 ul.navi > li > img {
     margin-top: 25px;
 }
@@ -113,8 +119,20 @@ ul.navi > li > img {
 .leftbar ul li a:hover {
     font-size: 20px;
 }
+.leftbar .search {
+    margin: 20px 0;
+    padding: 6px 2px;
+    width: 150px;
+    text-align: center;
+    border-radius: 20px;
+    border: 1px solid #62b934;
+    outline: none;
+    line-height: 20px;
+    font-size: 14px;
+    color: #62b934;
+}
 .leftbar > .qrcode {
-    margin-top: 40px;
+    margin-top: 0px;
 }
 .leftbar > .qrcode > img {
     margin-bottom: 4px;

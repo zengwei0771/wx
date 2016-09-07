@@ -31,6 +31,19 @@
         return array($db->getObjListBySql($sql), $hasmore);
     }
 
+    function search_articles($k, $page) {
+        global $db, $cpp;
+        $sql = 'select count(*) as c from article where title like "%'.$k.'%"';
+        $c = $db->getObjListBySql($sql);
+        $c = $c[0]->c;
+        $hasmore = $c > $page*$cpp;
+
+        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where title like "%'.$k.'%" order by time desc';
+        $start = ($page-1) * $cpp;
+        $sql .= ' limit '.$start.', '.$cpp;
+        return array($db->getObjListBySql($sql), $hasmore);
+    }
+
     function get_catagorys() {
         global $db;
         $last7day = date("Y-m-d", strtotime("-3 day"));

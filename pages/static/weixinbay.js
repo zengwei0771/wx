@@ -34,3 +34,12 @@ function video_load_next() {
         });
     }
 }
+
+$(function() {
+    $('.search').bind('keypress',function(event){
+        if(event.keyCode == "13") {
+            var q = $('.search').val();
+            document.location.href = '/?q=' + q;
+        }
+    });
+});

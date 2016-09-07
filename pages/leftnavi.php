@@ -5,4 +5,7 @@
     <li class="split"></li>
     <li><a href="/videos/" title="微信文章视频合集">视&nbsp;&nbsp;&nbsp;频</a></li>
 </ul>
+<div>
+    <input class="search" placeholder="搜一搜"></input>
+</div>
 <div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
