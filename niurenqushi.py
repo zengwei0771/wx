@@ -2,6 +2,9 @@
 #encoding=utf-8
 
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import requests
 from models import db, Article, Account, Pic
 from datetime import datetime, timedelta
