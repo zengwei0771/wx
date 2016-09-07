@@ -103,6 +103,7 @@ class WX():
             if not iframe.get('vidtype') and iframe.get('data-vidtype'):
                 iframe['vidtype'] = iframe['data-vidtype']
         content = re.sub('background-image: ?url\(.+?\);?', '', str(node))
+        content = re.sub('background=".+?"', '', content)
         return content, videos, imgs
 
     @staticmethod
