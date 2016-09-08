@@ -96,6 +96,8 @@ class WX():
                 iframe['src'] = src
                 iframe['width'] = '640'
                 iframe['height'] = '480'
+                src = re.sub('&auto=1', '&auto=0', src)
+                src = re.sub('#prefix_0', '', src)
                 videos.append(src)
             else:
                 print 'iframe is not video', str(iframe)
