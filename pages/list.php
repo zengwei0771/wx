@@ -102,7 +102,7 @@
                             } else if ($_GET['prefix'] == 'hotagree') {
                                 echo '><a href="/hotagree/" title="微信文章点赞热门">点赞热门</a>';
                             } else if ($_GET['q']) {
-                                echo '><a href="/?'.$_GET['q'].'" title="微信文章点赞热门">搜索"'.$_GET['q'].'"</a>';
+                                echo '><a href="/?q='.$_GET['q'].'" title="微信文章点赞热门">搜索"'.$_GET['q'].'"</a>';
                             }
                         } else if ($_GET['catagory']) {
                             echo '><a href="/catagory/'.$_GET['catagory'].'/" title="微信文章'.$catagory_name.'分类">'.$catagory_name.'</a>';
