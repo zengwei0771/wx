@@ -14,7 +14,7 @@ a {
 .head_wrap {
     position: fixed;
     text-align: center;
-    z-index: 10;
+    z-index: 30;
     background: #fff;
     border-bottom: 2px solid #62b934;
     width: 100%;
@@ -275,6 +275,11 @@ ul.address li a {
 }
 .next-page > a {
     color: #62b934;
+}
+.comment {
+    margin-top: 20px;
+    border-top: 2px solid #62b944;
+    padding-top: 20px;
 }
 
 

@@ -101,6 +101,17 @@
                         include 'contents/'.$time_strs[0].'/'.$article->titleid.'.html';
                     ?>
                 </article>
+                <div class="comment">
+                    <!--高速版-->
+                    <div id="SOHUCS" sid="article-<?php echo $article->articleid?>"></div>
+                    <script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+                    <script type="text/javascript">
+                    window.changyan.api.config({
+                        appid: 'cysAptWrK',
+                        conf: 'prod_57d72e31d2bd9f9a9b76f5f5ffe57ad4'
+                    });
+                    </script>
+                </div>
             </div>
         </div>
         <div id="gotop">
