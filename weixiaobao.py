@@ -21,7 +21,9 @@ URL = 'http://top.wxb.com/article/cat/%d/%s'
 
 def pull_weixiaobao():
     db.connect()
-    lastday = datetime.now() - timedelta(1)
+    timestamp = time.time()
+    timestamp = timestamp - timestamp%86400
+    lastday = datetime.utcfromtimestamp(timestamp) - timedelta(1)
     lastday_str = lastday.strftime('%Y-%m-%d')
     for i in range(1, 25):
         r = None
@@ -40,7 +42,7 @@ def pull_weixiaobao():
             item = item.find('div', class_='normal')
             title = item.find('a', class_='link-title').text.strip()
             title = WX.filter_emoji(title)
-            titleid = ConvertUtf8.convert(title)
+            titleid = ConvertUtf8.convert(title)[:224]
             t = lastday + timedelta(seconds=randint(0, 86400))
             if Article.select().where(Article.titleid == titleid):
                 print title, t, 'existed'

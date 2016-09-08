@@ -16,39 +16,56 @@ import time
 from common import UA, TO, write_content
 
 
-URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize=500&categoryid=0'
+URL = 'http://top.aiweibang.com/article/daily/class?k=%d&t='
 
 
 def pull():
     db.connect()
-    today = datetime.now().date()
-    for page in range(1, 2):
-        url = URL % page
+    timestamp = time.time()
+    timestamp = timestamp - timestamp%86400
+    lastday = datetime.utcfromtimestamp(timestamp) - timedelta(1)
+    for i in range(1, 60):
         r = None
         for retry in range(3):
             try:
-                r = requests.get(url, headers={'User-Agent':UA}, timeout=TO).json()
+                r = requests.get(URL % i, headers={'User-Agent':UA}, timeout=TO)
                 break
             except Exception, e:
                 print e
                 time.sleep(30)
         if r is None:
             continue
-        for item in r['item']:
-            t = datetime.strptime(item['AddTime'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
-            if t.date() < today - timedelta(1):
-                return
-
-            title = WX.filter_emoji(item['Title'])
+        dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
+        if not dom.find('div', class_='msg-main'):
+            continue
+        catagory = dom.find('div', id="rank_name").text.strip().split('』', 1)[0].split('『', 1)[1]
+        if not catagory:
+            catagory = '综合'
+        for item in dom.find('div', class_='msg-main').findAll('div', class_='msg-item'):
+            a = item.find('div', class_='title').find('a')
+            title = a.get('title')
+            title = WX.filter_emoji(title)
             titleid = ConvertUtf8.convert(title)[:224]
+            t = lastday + timedelta(seconds=randint(0, 86400))
             if Article.select().where(Article.titleid == titleid):
                 print title, t, 'existed'
                 continue
 
             print title, t, 'inserting'
-            arinfo = WX.article_info(item['SourceUrl'])
+            href = a.get('href')
+            nums = [i.strip() for i in item.find('span', class_='num').text.strip().split(' ') if i.strip()]
+            if nums[0].endswith('+'):
+                read = int(nums[0][:len(nums[0])-1])
+            else:
+                read = int(nums[0])
+            if nums[1].endswith('+'):
+                agree = int(nums[1][:len(nums[1])-1])
+            else:
+                agree = int(nums[1])
+
+            arinfo = WX.article_info(href)
             if not arinfo:
-                print 'pull article info failed', item['SourceUrl']
+                print 'pull article info failed'
                 continue
 
             account = Account.select().where(Account.aid == arinfo['account_id'])
@@ -58,20 +75,19 @@ def pull():
                     name=arinfo['account_name'],
                     desc=arinfo['account_desc']
                 )
-            read = item['ViewCount'] + randint(0, 3000)
             article = Article.create(
                 titleid=titleid,
                 title=title,
                 account=account,
-                desc=WX.filter_emoji(item['Summary']),
+                desc=arinfo['desc'],
                 content='',
-                source=item['SourceUrl'],
+                source=href,
                 time=t,
-                cover=item['Pic'],
-                catagory=item['CategoryName'],
-                catagoryid=ConvertUtf8.convert(item['CategoryName']),
+                cover=arinfo['cover'],
+                catagory=catagory,
+                catagoryid=ConvertUtf8.convert(catagory),
                 read=read,
-                agree=read*0.02+randint(0, 1000)*0.005,
+                agree=agree,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
             write_content(titleid, t, arinfo['content'])
@@ -82,6 +98,7 @@ def pull():
                     width=img['width'],
                     height=img['height']
                 )
+        time.sleep(10)
     db.close()
 
 
