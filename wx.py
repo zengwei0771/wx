@@ -56,6 +56,7 @@ class WX():
     @staticmethod
     def content_handle(root, node):
         imgs = []
+        img_id = 1;
         for img in node.findAll('img'):
             new_node = root.new_tag('div', **{'class':"img_wrap"})
             script_node = root.new_tag('script')
@@ -76,7 +77,8 @@ class WX():
             except Exception, e:
                 img_width = 400
                 img_height = 240
-            script_node.append('window.img=\'<img id="img" src="'+src+'" width="'+str(img_width)+'" height="'+str(img_height)+'" />\';document.write("<iframe src=\'javascript:parent.img\' width=\''+str(img_width)+'\' height=\''+str(img_height)+'\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");')
+            script_node.append('window.imgc'+str(img_id)+'=\'<img id="imgc'+str(img_id)+'" src="'+src+'" width="'+str(img_width)+'" height="'+str(img_height)+'" />\';document.write("<iframe src=\'javascript:parent.imgc'+str(img_id)+'\' width=\''+str(img_width)+'\' height=\''+str(img_height)+'\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");')
+            img_id += 1
             if img.get('style'):
                 new_node['style'] = img['style']
             img.replace_with(new_node)
