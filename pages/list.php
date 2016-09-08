@@ -114,7 +114,7 @@
                 <?php
                 foreach($articles as $a) {
                     $arr = explode('/', $a->cover);
-                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img=\'<img id="img" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img;\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.$a->time.'</time><a class="account" href="';
+                    echo '<article><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img'.$a->titleid.'=\'<img id="img'.$a->titleid.'" src="'.$a->cover.'" height="160" width="196" />\';document.write("<iframe src=\'javascript:parent.img'.$a->titleid.';\' height=\'160\' width=\'196\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><p>'.$a->article_desc.'</p><footer><time>'.$a->time.'</time><a class="account" href="';
                     if ($a->account_id) {
                         echo '/baccount/'.$a->account_id.'/';
                     }
