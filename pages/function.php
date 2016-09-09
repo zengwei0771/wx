@@ -13,18 +13,18 @@
         }
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid';
+        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc, FROM_UNIXTIME(`time`, "%Y-%m-%d") as d from article left join account on account_id = aid';
         if ($catagory != 'all') {
             $sql .= ' where catagoryid = "'.$catagory.'"';
         }
         if ($sortby == 'time') {
             $sql .= ' order by time desc';
         } else if ($sortby == 'read') {
-            $sql .= ' order by `read` desc';
+            $sql .= ' order by d desc, `read` desc';
         } else if ($sortby == 'agree') {
-            $sql .= ' order by `agree` desc';
+            $sql .= ' order by d desc, `agree` desc';
         } else { //agreeratio
-            $sql .= ' order by `agree`/`read` desc';
+            $sql .= ' order by d desc, `agree`/`read` desc';
         }
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
