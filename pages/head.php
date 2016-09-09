@@ -9,7 +9,7 @@
         <?php
         foreach(array_reverse(array_slice($catagorys, 0, 10)) as $c) {
             echo '<li><a href="/catagory/'.$c->catagoryid.'/" title="'.$c->catagory.'"';
-            if ($c->catagoryid == $_GET['catagory']) {
+            if (isset($_GET['catagory']) && $c->catagoryid == $_GET['catagory']) {
                 echo ' class="active"';
             }
             echo '>'.$c->catagory.'</a><img src="/static/navi-split.png"/></li>';

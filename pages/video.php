@@ -23,7 +23,7 @@
     }
     $videos_html .= '</div>';
 
-    if ($_GET['part'] == '1') {
+    if (isset($_GET['part']) && $_GET['part'] == '1') {
         echo $videos_html;
         exit(0);
     }

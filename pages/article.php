@@ -4,7 +4,7 @@
 
     $article = get_article($_GET['titleid']);
     $account_articles  = get_account_articles($article->account_id);
-    $more_articles = get_more_articles();
+    $more_articles = get_more_articles($article->articleid);
 
     $catagorys = get_catagorys();
 ?>

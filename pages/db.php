@@ -139,6 +139,20 @@ class DB
         }
     }
 
+    // 更新表中的属性值
+    public function executeSql($sql){
+        $db = new DB();
+        $db->open();
+        if(mysql_query($sql)){  //$key不要单引号
+            $db->close();
+            return true;
+        }
+        else{
+            $db->close();
+            return false;
+        }
+    }
+
     // @description: 取得一个table的所有属性名
     // @param: $tbName 表名
     // @return：字符串数组
