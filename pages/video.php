@@ -17,7 +17,7 @@
     }
     $videos_html .= '<div class="next-page">';
     if ($hasmore) {
-        $videos_html .= '<a href="/videos/'.($_GET['page']+1).'/" part-href="/videos/'.($_GET['page']+1).'/part/">下一页</a>';
+        $videos_html .= '<a href="/videos/'.($_GET['page']+1).'/" part-href="/videos/'.($_GET['page']+1).'/part/" onclick="video_load_next();return false;">下一页</a>';
     } else {
         $videos_html .= '没有更多内容';
     }
@@ -54,13 +54,6 @@
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         window.onscroll = pagescroll('other_video');
-        $(function () {
-            $(window).scroll(function () {
-                if (200 + $(window).scrollTop() >= ($(document).height() - $(window).height())) {
-                    video_load_next();
-                }
-            });
-        })
     </script>
 </head>
 <body>
