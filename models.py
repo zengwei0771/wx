@@ -34,7 +34,7 @@ class Article(BaseModel):
     content = TextField(null=False)
     cover = CharField(max_length=512)
     source = CharField(max_length=512)
-    time = DateTimeField(null=False)
+    date = DateField(null=False)
     read = IntegerField(null=False)
     agree = IntegerField(null=False)
     catagory = FixedCharField(max_length=32, null=False)

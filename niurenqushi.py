@@ -35,17 +35,15 @@ def pull():
         if r is None:
             continue
         for item in r['item']:
-            t = datetime.strptime(item['AddTime'].split('.')[0], '%Y-%m-%dT%H:%M:%S')
-            if t.date() < today - timedelta(1):
-                return
+            d = datetime.strptime(item['AddTime'].split('T')[0], '%Y-%m-%d').date()
 
             title = WX.filter_emoji(item['Title'])
             titleid = ConvertUtf8.convert(title)[:224]
             if Article.select().where(Article.titleid == titleid):
-                print title, t, 'existed'
+                print title, d, 'existed'
                 continue
 
-            print title, t, 'inserting'
+            print title, d, 'inserting'
             arinfo = WX.article_info(item['SourceUrl'])
             if not arinfo:
                 print 'pull article info failed', item['SourceUrl']
@@ -66,7 +64,7 @@ def pull():
                 desc=WX.filter_emoji(item['Summary']),
                 content='',
                 source=item['SourceUrl'],
-                time=t,
+                date=d,
                 cover=item['Pic'],
                 catagory=item['CategoryName'],
                 catagoryid=ConvertUtf8.convert(item['CategoryName']),
@@ -74,7 +72,7 @@ def pull():
                 agree=read*0.02+randint(0, 1000)*0.005,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
-            write_content(titleid, t, arinfo['content'])
+            write_content(titleid, d, arinfo['content'])
             for img in arinfo['imgs']:
                 Pic.create(
                     src=img['src'],

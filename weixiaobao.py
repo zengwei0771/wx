@@ -43,12 +43,12 @@ def pull_weixiaobao():
             title = item.find('a', class_='link-title').text.strip()
             title = WX.filter_emoji(title)
             titleid = ConvertUtf8.convert(title)[:224]
-            t = lastday + timedelta(seconds=randint(0, 86400))
+            d = lastday.date()
             if Article.select().where(Article.titleid == titleid):
-                print title, t, 'existed'
+                print title, d, 'existed'
                 continue
 
-            print title, t, 'inserting'
+            print title, d, 'inserting'
             href = item.find('a', class_='link-title').get('href')
             read = item.find('span', class_='read-num').text.strip()
             if not read.endswith('+'):
@@ -80,7 +80,7 @@ def pull_weixiaobao():
                 desc=arinfo['desc'],
                 content='',
                 source=href,
-                time=t,
+                date=d,
                 cover=arinfo['cover'],
                 catagory=catagory,
                 catagoryid=ConvertUtf8.convert(catagory),
@@ -88,7 +88,7 @@ def pull_weixiaobao():
                 agree=agree,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
-            write_content(titleid, t, arinfo['content'])
+            write_content(titleid, d, arinfo['content'])
             for img in arinfo['imgs']:
                 Pic.create(
                     src=img['src'],

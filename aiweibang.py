@@ -46,12 +46,12 @@ def pull():
             title = a.get('title')
             title = WX.filter_emoji(title)
             titleid = ConvertUtf8.convert(title)[:224]
-            t = lastday + timedelta(seconds=randint(0, 86400))
+            d = lastday.date()
             if Article.select().where(Article.titleid == titleid):
-                print title, t, 'existed'
+                print title, d, 'existed'
                 continue
 
-            print title, t, 'inserting'
+            print title, d, 'inserting'
             href = a.get('href')
             nums = [i.strip() for i in item.find('span', class_='num').text.strip().split(' ') if i.strip()]
             if nums[0].endswith('+'):
@@ -82,7 +82,7 @@ def pull():
                 desc=arinfo['desc'],
                 content='',
                 source=href,
-                time=t,
+                date=d,
                 cover=arinfo['cover'],
                 catagory=catagory,
                 catagoryid=ConvertUtf8.convert(catagory),
@@ -90,7 +90,7 @@ def pull():
                 agree=agree,
                 video=arinfo['videos'][0] if arinfo['videos'] else ''
             )
-            write_content(titleid, t, arinfo['content'])
+            write_content(titleid, d, arinfo['content'])
             for img in arinfo['imgs']:
                 Pic.create(
                     src=img['src'],

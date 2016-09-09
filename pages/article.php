@@ -94,11 +94,10 @@
             </ul>
             <div id="article_content">
                 <h2><?php echo $article->title;?></h2>
-                <span><?php echo $article->time;?></span>
+                <span><?php echo $article->date;?></span>
                 <article >
                     <?php
-                        $time_strs = explode(' ', $article->time);
-                        include 'contents/'.$time_strs[0].'/'.$article->titleid.'.html';
+                        include 'contents/'.$article->date.'/'.$article->titleid.'.html';
                     ?>
                 </article>
                 <div class="comment">

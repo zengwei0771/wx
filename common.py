@@ -10,8 +10,8 @@ TO = 20
 CONTENT_DIR = './pages/contents/'
 
 
-def write_content(titleid, t, content):
-    p = CONTENT_DIR + t.strftime('%Y-%m-%d')
+def write_content(titleid, d, content):
+    p = CONTENT_DIR + d.strftime('%Y-%m-%d')
     if not os.path.exists(p):
         os.mkdir(p)
 
