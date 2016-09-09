@@ -91,7 +91,7 @@
 
     function get_account_articles($accountid) {
         global $db;
-        $sql = 'select * from article where account_id = "'.$accountid.'" order by `time` desc';
+        $sql = 'select * from article where account_id = "'.$accountid.'" order by `time` desc limit 0, 15';
         return $db->getObjListBySql($sql);
     }
 
