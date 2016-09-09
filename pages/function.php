@@ -51,8 +51,8 @@
 
     function get_rand_articles() {
         global $db;
-        $lastday = date("Y-m-d", strtotime("-1 day"));
-        $sql = 'select * from article where `date` > "'.$lastday.'"';
+        $lastday = date("Y-m-d", strtotime("-3 day"));
+        $sql = 'select * from article where `date` >= "'.$lastday.'"';
         $data = $db->getObjListBySql($sql);
         $result = Array();
         if (count($data) > 15) {
