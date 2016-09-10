@@ -115,7 +115,7 @@
                         conf: 'prod_57d72e31d2bd9f9a9b76f5f5ffe57ad4'
                     });
                     </script>
-                    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysAptWrK"></script>
+                    <!--<script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysAptWrK"></script>-->
                 </div>
             </div>
         </div>
