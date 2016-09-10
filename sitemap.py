@@ -27,7 +27,7 @@ def build(dateoffset):
     db.connect()
     catagorys = set()
     articles = []
-    for article in Article.select().where(Article.time>=today-timedelta(dateoffset)).order_by(Article.time.desc()).limit(5000):
+    for article in Article.select().where(Article.date>=today-timedelta(dateoffset)).order_by(Article.date.desc()).limit(5000):
         catagorys.add(article.catagoryid)
         articles.append(article)
     for catagoryid in catagorys:
@@ -40,7 +40,7 @@ def build(dateoffset):
     for article in articles:
         urls.append({
             'loc': 'http://www.weixinbay.com/barticle/%s.html' % article.titleid,
-            'lastmod': article.time.strftime('%Y-%m-%d'),
+            'lastmod': article.date.strftime('%Y-%m-%d'),
             'changefreq': 'never',
             'priority': 0.4
         })
