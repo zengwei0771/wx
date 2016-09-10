@@ -31,7 +31,6 @@ class Article(BaseModel):
     title = CharField(max_length=255, null=False)
     account = ForeignKeyField(Account, to_field='aid')
     desc = CharField(max_length=512)
-    content = TextField(null=False)
     cover = CharField(max_length=512)
     source = CharField(max_length=512)
     date = DateField(null=False)
@@ -40,6 +39,7 @@ class Article(BaseModel):
     catagory = FixedCharField(max_length=32, null=False)
     catagoryid = FixedCharField(max_length=32, null=False)
     video = CharField(max_length=512)
+    vote = FixedCharField(max_length=16, null=True)
 
 
 class Pic(BaseModel):
