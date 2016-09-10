@@ -26,8 +26,7 @@
 
     <link rel="stylesheet" type="text/css" href="/static/weixinbay.css" media="all" />
 
-    <!--<script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>-->
-    <script type="text/javascript" charset="utf-8" src="http://changyan.itc.cn/js/lib/jquery.js"></script>
+    <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         window.onscroll = pagescroll('account_detail');
@@ -101,12 +100,12 @@
                         include 'contents/'.$article->date.'/'.$article->titleid.'.html';
                     ?>
                 </article>
+                <?php
+                    if ($article->vote) {
+                        echo '<div id="cyPk" role="cylabs" data-use="pk" data-pkId="'.$article->vote.'" ></div>';
+                    }
+                ?>
                 <div class="comment">
-                    <?php
-                        if ($article->vote) {
-                            echo '<div id="cyPk" role="cylabs" data-use="pk" data-pkId="'.$article->vote.'" ></div>';
-                        }
-                    ?>
                     <!--高速版-->
                     <div id="SOHUCS" sid="article-<?php echo $article->articleid?>"></div>
                     <script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
@@ -116,7 +115,6 @@
                         conf: 'prod_57d72e31d2bd9f9a9b76f5f5ffe57ad4'
                     });
                     </script>
-                    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysAptWrK"></script>
                 </div>
             </div>
         </div>
@@ -127,5 +125,6 @@
     <div class="foot">
         <?php include 'foot.php';?>
     </div>
+    <script type="text/javascript" charset="utf-8" src="https://changyan.sohu.com/js/changyan.labs.https.js?appid=cysAptWrK"></script>
 </body>
 </html>
