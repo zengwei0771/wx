@@ -62,7 +62,6 @@ def pull():
                 title=title,
                 account=account,
                 desc=WX.filter_emoji(item['Summary']),
-                content='',
                 source=item['SourceUrl'],
                 date=d,
                 cover=item['Pic'],

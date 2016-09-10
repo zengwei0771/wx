@@ -78,7 +78,6 @@ def pull_weixiaobao():
                 title=title,
                 account=account,
                 desc=arinfo['desc'],
-                content='',
                 source=href,
                 date=d,
                 cover=arinfo['cover'],

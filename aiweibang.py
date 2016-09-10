@@ -80,7 +80,6 @@ def pull():
                 title=title,
                 account=account,
                 desc=arinfo['desc'],
-                content='',
                 source=href,
                 date=d,
                 cover=arinfo['cover'],
