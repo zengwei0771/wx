@@ -1,3 +1,5 @@
+var JQ = jQuery;
+
 function pagescroll(box) {
   return function() {
     var t = document.documentElement.scrollTop || document.body.scrollTop;  
@@ -7,37 +9,37 @@ function pagescroll(box) {
         rightbarheight += children[i].clientHeight + 40;
     }
     if( t >= rightbarheight) { 
-        if ($('#'+box).css('position') == 'relative') {
-            $('#'+box).css({'position': 'fixed', 'display': 'none'});
-            $('#'+box).fadeIn();
+        if (JQ('#'+box).css('position') == 'relative') {
+            JQ('#'+box).css({'position': 'fixed', 'display': 'none'});
+            JQ('#'+box).fadeIn();
         }
-        $('#gotop').fadeIn();
+        JQ('#gotop').fadeIn();
     } else { 
-        $('#'+box).css({'position': 'relative'});
-        $('#gotop').fadeOut();
+        JQ('#'+box).css({'position': 'relative'});
+        JQ('#gotop').fadeOut();
     } 
   } 
 }
 
 function goTop() {
-    $('html,body').animate({scrollTop:0}, 500);
+    JQ('html,body').animate({scrollTop:0}, 500);
 }
 
 function video_load_next() {
-    if ($('.next-page a').length > 0) {
-        var href = $('.next-page a').attr('part-href');
+    if (JQ('.next-page a').length > 0) {
+        var href = JQ('.next-page a').attr('part-href');
         console.log(href);
-        $('.next-page').html('加载中。。。');
-        $.get(href, function(ret) {
-            $('.next-page').replaceWith(ret);
+        JQ('.next-page').html('加载中。。。');
+        JQ.get(href, function(ret) {
+            JQ('.next-page').replaceWith(ret);
         });
     }
 }
 
-$(function() {
-    $('.search').bind('keypress',function(event){
+JQ(function() {
+    JQ('.search').bind('keypress',function(event){
         if(event.keyCode == "13") {
-            var q = $('.search').val();
+            var q = JQ('.search').val();
             document.location.href = '/?q=' + q;
         }
     });

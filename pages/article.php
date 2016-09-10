@@ -29,10 +29,11 @@
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
+        var JQ = jQuery;
         window.onscroll = pagescroll('account_detail');
-        $(function() {
+        JQ(function() {
             setTimeout(function() {
-                $.post('/daction/read/<?php echo $article->titleid;?>');
+                JQ.post('/daction/read/<?php echo $article->titleid;?>');
             }, 3000);
         });
     </script>
