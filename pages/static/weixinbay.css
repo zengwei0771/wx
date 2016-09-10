@@ -530,5 +530,7 @@ ul.address li a {
 
 
 #cyPk {
-    margin: 20px 0 0 0;
+    margin: 40px 0 0 0;
+    padding: 20px 0 0 0;
+    border-top: 1px dotted #62b944;
 }
