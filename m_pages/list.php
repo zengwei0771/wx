@@ -24,7 +24,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=640,initial-scale=1.0, minimum-scale=0.1, maximum-scale=10, user-scalable=yes"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="format-detection" content="telephone=no"/>
@@ -77,7 +77,7 @@
                 <?php
                 foreach($articles as $a) {
                     $arr = explode('/', $a->cover);
-                    echo '<article><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img'.$a->titleid.'=\'<img id="img'.$a->titleid.'" src="'.$a->cover.'" height="120" width="160" />\';document.write("<iframe src=\'javascript:parent.img'.$a->titleid.';\' height=\'120\' width=\'160\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><p>'.$a->article_desc.'</p><footer><a class="account" href="';
+                    echo '<article><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img'.$a->titleid.'=\'<img id="img'.$a->titleid.'" src="'.$a->cover.'" height="90" width="120" />\';document.write("<iframe src=\'javascript:parent.img'.$a->titleid.';\' height=\'90\' width=\'120\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><p>'.$a->article_desc.'</p><footer><a class="account" href="';
                     if ($a->account_id) {
                         echo '/baccount/'.$a->account_id.'/';
                     }
