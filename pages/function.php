@@ -2,10 +2,9 @@
     require_once('config.php');
     require_once('db.php');
 
-    $cpp = 40;  //count per page
 
-    function get_articles($catagory, $sortby, $page) {
-        global $db, $cpp;
+    function get_articles($catagory, $sortby, $page, $cpp=40) {
+        global $db;
         if ($catagory != 'all') {
             $c = $db->getCountByAtr('article', 'catagoryid', $catagory);
         } else {
@@ -29,8 +28,8 @@
         return array($db->getObjListBySql($sql), $hasmore);
     }
 
-    function search_articles($k, $page) {
-        global $db, $cpp;
+    function search_articles($k, $page, $cpp=40) {
+        global $db;
         $sql = 'select count(*) as c from article where title like "%'.$k.'%"';
         $c = $db->getObjListBySql($sql);
         $c = $c[0]->c;
@@ -44,7 +43,7 @@
 
     function get_catagorys() {
         global $db;
-        $last7day = date("Y-m-d", strtotime("-3 day"));
+        $last7day = date("Y-m-d", strtotime("-7 day"));
         $sql = 'select `catagoryid`, `catagory`, count(*) as c from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by c desc';
         return $db->getObjListBySql($sql);
     }
@@ -100,8 +99,8 @@
     }
 
 
-    function get_account($accountid, $page) {
-        global $db, $cpp;
+    function get_account($accountid, $page, $cpp=40) {
+        global $db;
         $account = $db->getDataByAtr('account', 'aid', $accountid);
         if (count($account) == 0) {
             header('HTTP/1.1 404 Not Found');
@@ -131,9 +130,8 @@
         return $article[0]->catagory;
     }
 
-    function get_videos($page) {
+    function get_videos($page, $cpp=5) {
         global $db;
-        $cpp = 5;
         $sql = 'select count(*) as c from article where `video` != ""';
         $c = $db->getObjListBySql($sql);
 	$c = $c[0]->c;
