@@ -17,11 +17,11 @@
             $sql .= ' where catagoryid = "'.$catagory.'"';
         }
         if ($sortby == 'read') {
-            $sql .= ' order by (to_days(`date`) - (to_days(`date`) % 3)) desc, `read` desc';
+            $sql .= ' order by `date` desc, `read` desc';
         } else if ($sortby == 'agree') {
-            $sql .= ' order by (to_days(`date`) - (to_days(`date`) % 3)) desc, `agree` desc';
+            $sql .= ' order by `date` desc, `agree` desc';
         } else { //agreeratio
-            $sql .= ' order by (to_days(`date`) - (to_days(`date`) % 3)) desc, `agree`/`read` desc';
+            $sql .= ' order by `date` desc, `agree`/`read` desc';
         }
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
