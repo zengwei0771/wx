@@ -457,6 +457,7 @@ ul.address li a {
 }
 #js_content .img_wrap {
     text-align: center;
+    overflow: auto;
 }
 #js_content blockquote {
     border-style: solid;
