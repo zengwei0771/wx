@@ -258,6 +258,7 @@ a {
 }
 #js_content .img_wrap {
     text-align: center;
+    width: auto !important;
 }
 #js_content blockquote {
     border-style: solid;
