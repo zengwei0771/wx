@@ -41,36 +41,11 @@
     <link rel="stylesheet" type="text/css" href="/static/weixinbay.css" media="all" />
 
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
-    <script src="/static/weixinbay.js" language="JavaScript"></script>
 </head>
 <body>
     <div class="head_wrap">
-        <div class="head">
-            <div class="left">
-                <a href="javascript:void(0);" onclick="menu();" title="菜单"><img src="/static/menu.png" height="36" width="30" /></a>
-            </div>
-            <div class="right">
-                <h2>
-                <?php
-                    if ($_GET['catagory'] == 'all') {
-                        if ($_GET['prefix'] == 'recommend') {
-                            echo '推荐阅读';
-                        } else if ($_GET['prefix'] == 'hotagree') {
-                            echo '点赞热门';
-                        } else if (isset($_GET['q'])) {
-                            echo '搜索"'.$_GET['q'].'"';
-                        } else {
-                            echo '热门排行';
-                        }
-                    } else if ($_GET['catagory']) {
-                        echo $catagory_name;
-                    }
-                ?>
-                </h2>
-            </div>
-        </div>
+        <?php include 'head.php';?>
     </div>
-    <?php include 'menu.php';?>
     <div class="body">
         <div class="content">
             <div class="article">

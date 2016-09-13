@@ -28,33 +28,19 @@
     <link rel="stylesheet" type="text/css" href="/static/weixinbay.css" media="all" />
 
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
-    <script src="/static/weixinbay.js" language="JavaScript"></script>
 </head>
 <body>
     <div class="head_wrap">
-        <div class="head">
-            <div class="left">
-                <a href="javascript:void(0);" onclick="menu();" title="菜单"><img src="/static/menu.png" height="36" width="30" /></a>
-            </div>
-            <div class="right">
-            <h2>公众号详情</h2>
-            </div>
-        </div>
+        <?php include 'head.php';?>
     </div>
-    <?php include 'menu.php';?>
     <div class="body">
         <div class="content">
-            <h3>公众号信息</h3>
+            <h2><?php echo $account->name;?></h2>
             <div id="account_detail">
                 <?php if($account->aid){?>
                 <img src="http://open.weixin.qq.com/qr/code/?username=<?php echo $account->aid;?>" height="128" width="128" />
                 <?php }?>
                 <div class="account-name">
-                <?php if($account->aid){?>
-                    <a href="/baccount/<?php echo $account->aid;?>/" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a>
-                <?php }else{?>
-                    <a href="" title="<?php echo $account->name;?>所有文章"><?php echo $account->name;?></a>
-                <?php }?>
                     <span class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $account->aid;?></span>
                 </div>
                 <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $account->desc;?></div>
@@ -63,7 +49,7 @@
             <ul id="other_article">
             <?php
             foreach($articles as $aa) {
-                echo '<li><a target="_blank" title="'.$aa->title.'" href="/barticle/'.$aa->titleid.'.html">'.$aa->title.'</a></li>';
+                echo '<li><span>'.$aa->date.'&nbsp;&nbsp;</span><a target="_blank" title="'.$aa->title.'" href="/barticle/'.$aa->titleid.'.html">'.$aa->title.'</a></li>';
             }
             ?>
             </ul>

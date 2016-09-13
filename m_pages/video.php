@@ -2,31 +2,7 @@
     require_once('../pages/config.php');
     require_once('../pages/function.php');
 
-    list($videos, $hasmore) = get_videos($_GET['page']);
-
-    $videos_html = '';
-    foreach($videos as $v) {
-        $src = str_replace('auto=1', 'auto=0', $v->video);
-        if (!strpos($src, 'auto=0')) {
-            if ($src[count($src)-1] != '&') {
-                $src .= '&';
-            }
-            $src .= 'auto=0';
-        }
-       $videos_html .= '<div class="video"><a target="_blank" title="'.$v->title.'" href="/barticle/'.$v->titleid.'.html">'.$v->title.'</a><iframe allowfullscreen="" vidtype="1" frameborder="0" src="'.$src.'" style="z-index:1;"></iframe></div>';
-    }
-    $videos_html .= '<div class="next-page">';
-    if ($hasmore) {
-        $videos_html .= '<a href="/videos/'.($_GET['page']+1).'/" part-href="/videos/'.($_GET['page']+1).'/part/" onclick="video_load_next();return false;">下一页</a>';
-    } else {
-        $videos_html .= '没有更多内容';
-    }
-    $videos_html .= '</div>';
-
-    if (isset($_GET['part']) && $_GET['part'] == '1') {
-        echo $videos_html;
-        exit(0);
-    }
+    list($videos, $hasmore) = get_videos_with_account($_GET['page']);
 
     $catagorys = get_catagorys();
 ?>
@@ -52,29 +28,45 @@
     <link rel="stylesheet" type="text/css" href="/static/weixinbay.css" media="all" />
 
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
-    <script src="/static/weixinbay.js" language="JavaScript"></script>
-    <script>
-    $(function() {
-        $('iframe').height($('iframe').width() * 0.75);
-    });
-    </script>
 </head>
 <body>
     <div class="head_wrap">
-        <div class="head">
-            <div class="left">
-                <a href="javascript:void(0);" onclick="menu();" title="菜单"><img src="/static/menu.png" height="36" width="30" /></a>
-            </div>
-            <div class="right">
-            <h2>视频聚合</h2>
-            </div>
-        </div>
+        <?php include 'head.php';?>
     </div>
-    <?php include 'menu.php';?>
     <div class="body">
         <div class="content">
-            <div class="video-wrap">
-                <?php echo $videos_html;?>
+            <div class="article">
+                <?php
+                foreach($videos as $a) {
+                    $arr = explode('/', $a->cover);
+                    echo '<article><h2><a target="_blank" href="/barticle/'.$a->titleid.'.html" title="'.$a->title.'">'.$a->title.'</a></h2><a target="_blank" title="'.$a->title.'" href="/barticle/'.$a->titleid.'.html" /><script>window.img'.$a->titleid.'=\'<img id="img'.$a->titleid.'" src="'.$a->cover.'" height="90" width="120" />\';document.write("<iframe src=\'javascript:parent.img'.$a->titleid.';\' height=\'90\' width=\'120\' frameBorder=\'0\' scrolling=\'no\' marginwidth=\'0\' marginheight=\'0\'></iframe>");</script></a><p>'.$a->article_desc.'</p><footer><a class="account" href="';
+                    if ($a->account_id) {
+                        echo '/baccount/'.$a->account_id.'/';
+                    }
+                    echo '" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><time>'.$a->date.'</time></footer></article>';
+                }
+                ?>
+                <div class="next-page">
+                    <?php
+                        if ($hasmore) {
+                            $html = '<a href="';
+                            if ($_GET['prefix'] != 'none') {
+                                if ($_GET['catagory'] != 'all') {
+                                    $html .= '/catagory';
+                                }
+                                $html .= '/'.$_GET['prefix'];
+                            }
+                            $html .= '/'.($_GET['page']+1).'/';
+                            if (isset($_GET['q'])) {
+                                $html .= '?q='.$_GET['q'];
+                            }
+                            $html .= '">下一页</a>';
+                            echo $html;
+                        } else {
+                            echo '没有更多内容';
+                        }
+                    ?>
+                </div>
             </div>
         </div>
     </div>

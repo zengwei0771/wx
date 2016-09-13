@@ -134,7 +134,7 @@
         global $db;
         $sql = 'select count(*) as c from article where `video` != ""';
         $c = $db->getObjListBySql($sql);
-	$c = $c[0]->c;
+        $c = $c[0]->c;
         $hasmore = $c > $page*$cpp;
 
         $sql = 'select * from article where `video` != "" order by `date` desc';
@@ -158,5 +158,18 @@
             array_push($result, $data[$i]);
         }
         return $result;
+    }
+
+    function get_videos_with_account($page, $cpp=20) {
+        global $db;
+        $sql = 'select count(*) as c from article where `video` != ""';
+        $c = $db->getObjListBySql($sql);
+        $c = $c[0]->c;
+        $hasmore = $c > $page*$cpp;
+
+        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where `video` != "" order by `date` desc';
+        $start = ($page-1) * $cpp;
+        $sql .= ' limit '.$start.', '.$cpp;
+        return array($db->getObjListBySql($sql), $hasmore);
     }
 ?>

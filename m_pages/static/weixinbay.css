@@ -8,22 +8,17 @@ a {
     text-decoration: none;
     color: #62b944;
 }
-a:visited {
-    color: #888;
-}
 .hide {
     display: none;
 }
 
 
 .head_wrap {
-    position: fixed;
     text-align: center;
-    z-index: 30;
     background: #fff;
     border-bottom: 2px solid #62b934;
     width: 100%;
-    left: 0;
+    display: inline-block;
 }
 .head {
     width: calc(100% - 20px);
@@ -34,66 +29,26 @@ a:visited {
 .head > .left {
     float: left;
     display: inline-block;
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 40px;
     text-align: left;
+}
+.head > .left > a {
+    font-size: 20px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+    color: #62b944;
+    font-weight: bolder;
 }
 .head > .right {
     float: left;
     display: inline-block;
-    width: calc(100% - 60px);
-    height: 60px;
+    width: calc(100% - 100px);
+    height: 40px;
     text-align: right;
 }
-.head > .right h2 {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    height: 60px;
-    line-height: 70px;
-    margin: 0;
-    padding: 0;
-    font-family: monospace;
-    font-size: 20px;
-    color: #62b944;
-}
-.head a {
-    color: #62b944;
-    font-weight: bolder;
-    text-decoration: none;
-    border: none;
-    background: white;
-    padding: 4px 0 0 0;
-    display: inline-block;
-}
-.head img {
-    margin-top: 10px;
-}
-#background {
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 20;
-    background-color: rgba(98,176,68,0.1);
-    display: none;
-}
 #menu {
-    position: fixed;
-    height: calc(100% - 72px);
-    width: 160px;
-    max-width: 160px;
-    top: 0;
-    left: -50%;
-    z-index: 21;
-    background-color: #f8f8f8;
-    padding: 50px 10px 20px 10px;
-    border-bottom: 2px solid #62b944;
-    border-right: 2px solid #62b944;
-    overflow: auto;
-}
-#menu ul {
     list-style: none;
     display: inline-block;
     width: 100%;
@@ -101,35 +56,33 @@ a:visited {
     margin: 0;
 }
 #menu li {
-    float: left;
-    width: 100%;
+    float: right;
+    width: 40px;
     text-align: center;
-    height: 32px;
-    line-height: 32px;
+    height: 40px;
+    line-height: 40px;
     white-space: nowrap;
     overflow: hidden;
 }
-#menu li.split {
-    height: 0;
-    border-top: 1px solid #62b944;
-    margin: 10px 0;
+#catagory {
+    list-style: none;
+    position: relative;
+    padding: 10px 20px;
+    margin: 0;
+    border-top: 1px solid lightgray;
+    display: none;
 }
-#menu a {
-    color: #62b944;
-}
-#menu li.active a {
-    color: white;
-}
-#menu h5 {
-    text-align: left;
-    margin: 4px;
-    color: #bbb;
-    font-size: 10px;
+#catagory li {
+    width: 40px;
+    height: 20px;
+    padding: 10px;
+    line-height: 20px;
+    float: right;
 }
 
 
 .body {
-    padding-top: 70px;
+    padding-top: 0;
     width: 100%;
     display: inline-block;
     min-height: 600px;
@@ -151,7 +104,7 @@ a:visited {
     height: 136px;
 }
 .article > article > h2 {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     font-weight: bold;
     text-align: left;
@@ -181,7 +134,7 @@ a:visited {
     height: 60px;
     width: calc(100% - 150px);
     padding: 0;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 20px;
     margin: 0;
     overflow: hidden;
@@ -195,7 +148,7 @@ a:visited {
     height: 24px;
     width: calc(100% - 150px);
     line-height: 20px;
-    font-size: 16px;
+    font-size: 14px;
     color: #bbb;
     overflow: hidden;
     white-space: nowrap;
@@ -210,7 +163,7 @@ a:visited {
 .article > article > footer > a.account {
     margin-right: 8px;
     color: #62b944;
-    font-size: 16px;
+    font-size: 14px;
     margin-left: 4px;
     float: right;
     text-decoration: none;
@@ -221,7 +174,7 @@ a:visited {
 }
 .next-page > a {
     color: #62b934;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 
@@ -321,7 +274,7 @@ a:visited {
     margin: 10px 20px 10px 10px;
 }
 #account_detail .account-name {
-    padding: 20px 60px 0 10px;
+    padding: 10px 60px 0 10px;
     font-size: 20px;
     font-weight: bolder;
     line-height: 24px;
@@ -363,6 +316,8 @@ a:visited {
     width: 100%;
     display: block;
     line-height: 24px;
+    color: #888;
+    font-size: 13px;
 }
 
 

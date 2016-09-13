@@ -29,7 +29,6 @@
     <link rel="stylesheet" type="text/css" href="/static/weixinbay.css" media="all" />
 
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
-    <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         var JQ = jQuery;
         JQ(function() {
@@ -41,18 +40,11 @@
 </head>
 <body>
     <div class="head_wrap">
-        <div class="head">
-            <div class="left">
-                <a href="javascript:void(0);" onclick="menu();" title="菜单"><img src="/static/menu.png" height="36" width="30" /></a>
-            </div>
-            <div class="right">
-            <h2><?php echo $article->title;?></h2>
-            </div>
-        </div>
+        <?php include 'head.php';?>
     </div>
-    <?php include 'menu.php';?>
     <div class="body">
         <div class="content">
+            <h2><?php echo $article->title;?></h2>
             <div class="author">
                 <?php if($article->aid){?>
                     <a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->account_name;?>所有文章">@<?php echo $article->account_name;?></a>
