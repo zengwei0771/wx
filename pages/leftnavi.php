@@ -8,4 +8,4 @@
 <div>
     <input class="search" placeholder="搜一搜"></input>
 </div>
-<div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
+<div class="qrcode"><img src="/static/qrcode.png" width="160" /><a href="http://<?php echo $m_site_domain;?>/" title="<?php echo $site_name?>移动站">扫一扫 手机版</a></div>
