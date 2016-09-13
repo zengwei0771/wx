@@ -7,18 +7,18 @@ from xml.dom.minidom import Document
 from datetime import datetime, timedelta
 
 
-def build(dateoffset):
+def build(site, path, dateoffset):
     today = datetime.now().date()
     urls = []
     urls.append({
-        'loc': 'http://www.weixinbay.com/',
+        'loc': 'http://'+site+'/',
         'lastmod': today.strftime('%Y-%m-%d'),
         'changefreq': 'always',
         'priority': 1
     })
     for u in ['hotread', 'recommend', 'hotagree', 'videos']:
         urls.append({
-            'loc': 'http://www.weixinbay.com/%s/' % u,
+            'loc': 'http://%s/%s/' % (site, u),
             'lastmod': today.strftime('%Y-%m-%d'),
             'changefreq': 'always',
             'priority': 0.8
@@ -32,14 +32,14 @@ def build(dateoffset):
         articles.append(article)
     for catagoryid in catagorys:
         urls.append({
-            'loc': 'http://www.weixinbay.com/catagory/%s/' % catagoryid,
+            'loc': 'http://%s/catagory/%s/' % (site, catagoryid),
             'lastmod': today.strftime('%Y-%m-%d'),
             'changefreq': 'always',
             'priority': 0.6
         })
     for article in articles:
         urls.append({
-            'loc': 'http://www.weixinbay.com/barticle/%s.html' % article.titleid,
+            'loc': 'http://%s/barticle/%s.html' % (site, article.titleid),
             'lastmod': article.date.strftime('%Y-%m-%d'),
             'changefreq': 'never',
             'priority': 0.4
@@ -70,10 +70,11 @@ def build(dateoffset):
 
         urlsetnode.appendChild(urlnode)
 
-    f = open('./pages/sitemap.xml','w')
+    f = open(path, 'w')
     f.write(doc.toprettyxml(indent='  ', encoding='utf-8'))
     f.close()
 
 
 if __name__ == '__main__':
-    build(3)
+    build('www.weixinbay.com', './pages/sitemap.xml', 3)
+    build('m.weixinbay.com', './m_pages/sitemap.xml', 3)
