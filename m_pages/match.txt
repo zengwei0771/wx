@@ -1,0 +1,8 @@
+http://www.weixinbay.com/	http://m.weixinbay.com/
+http://www.weixinbay.com/hotread/	http://m.weixinbay.com/hotread/
+http://www.weixinbay.com/hotagree/	http://m.weixinbay.com/hotagree/
+http://www.weixinbay.com/recommend/	http://m.weixinbay.com/recommend/
+http://www.weixinbay.com/videos/	http://m.weixinbay.com/videos/
+http://www.weixinbay.com/catagory/(\w+)/	http://m.weixinbay.com/catagory/\1/
+http://www.weixinbay.com/barticle/(\w+)\.html	http://m.weixinbay.com/barticle/\1.html
+http://www.weixinbay.com/baccount/(\w+)/	http://m.weixinbay.com/baccount/\1/
