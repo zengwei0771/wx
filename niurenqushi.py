@@ -6,14 +6,14 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
-from models import db, Article, Account, Pic
-from datetime import datetime, timedelta
+from models import db, Article, Account, Pic, insert_article
 from bs4 import BeautifulSoup
 from random import randint
 from convertutf8 import ConvertUtf8
 from wx import WX
 import time
 from common import UA, TO, write_content
+import shortuuid
 
 
 URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize=500&categoryid=0'
@@ -21,7 +21,6 @@ URL = 'http://weixin.niurenqushi.com/api/get_article_list/?pageindex=%d&pagesize
 
 def pull():
     db.connect()
-    today = datetime.now().date()
     for page in range(1, 2):
         url = URL % page
         r = None
@@ -35,50 +34,21 @@ def pull():
         if r is None:
             continue
         for item in r['item']:
-            d = datetime.strptime(item['AddTime'].split('T')[0], '%Y-%m-%d').date()
-
             title = WX.filter_emoji(item['Title'])
-            titleid = ConvertUtf8.convert(title)[:224]
-            if Article.select().where(Article.titleid == titleid):
-                print title, d, 'existed'
+            if Article.select().where(Article.title == title):
+                print title, 'existed'
                 continue
+            titleid = shortuuid.uuid(name=title.encode('utf8'))
 
-            print title, d, 'inserting'
+            print title, 'inserting'
             arinfo = WX.article_info(item['SourceUrl'])
             if not arinfo:
                 print 'pull article info failed', item['SourceUrl']
                 continue
 
-            account = Account.select().where(Account.aid == arinfo['account_id'])
-            if not account:
-                account = Account.create(
-                    aid=arinfo['account_id'],
-                    name=arinfo['account_name'],
-                    desc=arinfo['account_desc']
-                )
             read = item['ViewCount'] + randint(0, 3000)
-            article = Article.create(
-                titleid=titleid,
-                title=title,
-                account=account,
-                desc=WX.filter_emoji(item['Summary']),
-                source=item['SourceUrl'],
-                date=d,
-                cover=item['Pic'],
-                catagory=item['CategoryName'],
-                catagoryid=ConvertUtf8.convert(item['CategoryName']),
-                read=read,
-                agree=read*0.02+randint(0, 1000)*0.005,
-                video=arinfo['videos'][0] if arinfo['videos'] else ''
-            )
-            write_content(titleid, d, arinfo['content'])
-            for img in arinfo['imgs']:
-                Pic.create(
-                    src=img['src'],
-                    article=article,
-                    width=img['width'],
-                    height=img['height']
-                )
+            agree = read*0.02+randint(0, 1000)*0.005
+            insert_article(item['SourceUrl'], title, titleid, item['CategoryName'], arinfo, read, agree)
     db.close()
 
 

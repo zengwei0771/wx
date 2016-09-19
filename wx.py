@@ -8,6 +8,7 @@ sys.setrecursionlimit(10000)
 from bs4 import BeautifulSoup
 from common import UA, TO
 import re
+from datetime import datetime
 
 
 class WX():
@@ -38,12 +39,15 @@ class WX():
 
             desc = '\n'.join([i.strip() for i in contentnode.text.strip().split('\n') if i.strip()][0:4])
 
+            post_date = datetime.strptime(cdom.find('em', id="post-date").text, '%Y-%m-%d')
+
             content, videos, imgs = WX.content_handle(cdom, contentnode)
             return {
                 'account_name': WX.filter_emoji(account_name),
                 'account_id': account_id,
                 'account_desc': WX.filter_emoji(account_desc),
                 'cover': cover,
+                'date': post_date,
                 'content': WX.filter_emoji(content),
                 'desc': WX.filter_emoji(desc[:400]),
                 'videos': videos,
