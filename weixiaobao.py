@@ -6,7 +6,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
-from models import db, Article, Account, Pic, insert_article
+from models import db, Article, Account, Pic
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from random import randint
@@ -66,7 +66,7 @@ def pull_weixiaobao():
                 print 'pull article info failed'
                 continue
 
-            insert_article(href, title, titleid, catagory, arinfo, read, agree)
+            Article.add(href, title, titleid, catagory, arinfo, read, agree)
         time.sleep(10)
     db.close()
 

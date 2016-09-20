@@ -6,7 +6,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
-from models import db, Article, Account, Pic, insert_article
+from models import db, Article, Account, Pic
 from bs4 import BeautifulSoup
 from random import randint
 from convertutf8 import ConvertUtf8
@@ -48,7 +48,7 @@ def pull():
 
             read = item['ViewCount'] + randint(0, 3000)
             agree = read*0.02+randint(0, 1000)*0.005
-            insert_article(item['SourceUrl'], title, titleid, item['CategoryName'], arinfo, read, agree)
+            Article.add(item['SourceUrl'], title, titleid, item['CategoryName'], arinfo, read, agree)
     db.close()
 
 

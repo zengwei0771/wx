@@ -6,7 +6,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
-from models import db, Article, Account, Pic, insert_article
+from models import db, Article, Account, Pic
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from random import randint
@@ -62,7 +62,7 @@ def pull_vccoo():
                         continue
                     read = randint(0, 500)
                     agree = read*0.02 + randint(0, 1000)*0.005
-                    insert_article(source, title, titleid, catagory, arinfo, read, agree)
+                    Article.add(source, title, titleid, catagory, arinfo, read, agree)
                 else:
                     print 'get source failed'
                     continue

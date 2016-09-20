@@ -5,7 +5,7 @@
 from peewee import *
 from datetime import datetime
 from convertutf8 import ConvertUtf8
-from common import write_content
+from common import write_content, keyword_hot
 
 
 db = MySQLDatabase('wx', host='127.0.0.1', user='root', passwd='12qwaszx', charset='utf8')
@@ -42,6 +42,43 @@ class Article(BaseModel):
     catagoryid = FixedCharField(max_length=32, null=False)
     video = CharField(max_length=512)
     vote = FixedCharField(max_length=16, null=True)
+    keywords = CharField(max_length=255, null=True)
+    index = IntegerField(null=True)
+
+    @classmethod
+    def add(cls, source, title, titleid, catagory, arinfo, read, agree):
+        account = Account.select().where(Account.aid == arinfo['account_id'])
+        if not account:
+            account = Account.create(
+                aid=arinfo['account_id'],
+                name=arinfo['account_name'],
+                desc=arinfo['account_desc']
+            )
+        keywords, hot = keyword_hot(title)
+        article = cls.create(
+            titleid=titleid,
+            title=title,
+            account=account,
+            desc=arinfo['desc'],
+            source=source,
+            date=arinfo['date'],
+            cover=arinfo['cover'],
+            catagory=catagory,
+            catagoryid=ConvertUtf8.convert(catagory),
+            read=read,
+            agree=agree,
+            video=arinfo['videos'][0] if arinfo['videos'] else '',
+            keywords=','.join(keywords),
+            index=hot
+        )
+        write_content(titleid, arinfo['date'], arinfo['content'])
+        for img in arinfo['imgs']:
+            Pic.create(
+                src=img['src'],
+                article=article,
+                width=img['width'],
+                height=img['height']
+            )
 
 
 class Pic(BaseModel):
@@ -53,37 +90,6 @@ class Pic(BaseModel):
     width = IntegerField(null=False)
     height = IntegerField(null=False)
 
-
-def insert_article(source, title, titleid, catagory, arinfo, read, agree):
-    account = Account.select().where(Account.aid == arinfo['account_id'])
-    if not account:
-        account = Account.create(
-            aid=arinfo['account_id'],
-            name=arinfo['account_name'],
-            desc=arinfo['account_desc']
-        )
-    article = Article.create(
-        titleid=titleid,
-        title=title,
-        account=account,
-        desc=arinfo['desc'],
-        source=source,
-        date=arinfo['date'],
-        cover=arinfo['cover'],
-        catagory=catagory,
-        catagoryid=ConvertUtf8.convert(catagory),
-        read=read,
-        agree=agree,
-        video=arinfo['videos'][0] if arinfo['videos'] else ''
-    )
-    write_content(titleid, arinfo['date'], arinfo['content'])
-    for img in arinfo['imgs']:
-        Pic.create(
-            src=img['src'],
-            article=article,
-            width=img['width'],
-            height=img['height']
-        )
 
 if __name__ == '__main__':
     db.connect()

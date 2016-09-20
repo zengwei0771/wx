@@ -16,12 +16,15 @@
         if ($catagory != 'all') {
             $sql .= ' where catagoryid = "'.$catagory.'"';
         }
-        if ($sortby == 'read') {
-            $sql .= ' order by `date` desc, `read` desc';
+        $sql .= ' order by `date` desc';
+        if ($sortby == 'hot') {
+            $sql .= ', `index` desc';
+        } else if ($sortby == 'read') {
+            $sql .= ', `read` desc';
         } else if ($sortby == 'agree') {
-            $sql .= ' order by `date` desc, `agree` desc';
-        } else { //agreeratio
-            $sql .= ' order by `date` desc, `agree`/`read` desc';
+            $sql .= ', `agree` desc';
+        } else if ($sortby == 'agreeratio') {
+            $sql .= ', `agree`/`read` desc';
         }
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
@@ -35,7 +38,7 @@
         $c = $c[0]->c;
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where title like "%'.$k.'%" order by `date` desc';
+        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where title like "%'.$k.'%" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
         return array($db->getObjListBySql($sql), $hasmore);
@@ -44,25 +47,16 @@
     function get_catagorys() {
         global $db;
         $last7day = date("Y-m-d", strtotime("-7 day"));
-        $sql = 'select `catagoryid`, `catagory`, count(*) as c from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by c desc';
+        $sql = 'select `catagoryid`, `catagory`, sum(`index`) as hot from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by hot desc';
         return $db->getObjListBySql($sql);
     }
 
     function get_rand_articles() {
         global $db;
-        $lastday = date("Y-m-d", strtotime("-3 day"));
-        $sql = 'select * from article where `date` >= "'.$lastday.'"';
+        $lastday = date("Y-m-d", strtotime("-7 day"));
+        $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 15';
         $data = $db->getObjListBySql($sql);
-        $result = Array();
-        if (count($data) > 15) {
-            $dist = count($data) / 15;
-        } else {
-            $dist = 1;
-        }
-        for($i = $dist; $i < count($data); $i+=$dist) {
-            array_push($result, $data[$i]);
-        }
-        return $result;
+        return $data;
     }
 
     function get_hot_accounts() {
@@ -88,7 +82,7 @@
 
     function get_account_articles($accountid) {
         global $db;
-        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc limit 0, 15';
+        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc, `index` desc limit 0, 15';
         return $db->getObjListBySql($sql);
     }
 
@@ -110,7 +104,7 @@
         }
         $c = $db->getCountByAtr('article', 'account_id', $accountid);
         $hasmore = $c > $page*$cpp;
-        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc';
+        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
         $articles = $db->getObjListBySql($sql);
@@ -137,7 +131,7 @@
         $c = $c[0]->c;
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select * from article where `video` != "" order by `date` desc';
+        $sql = 'select * from article where `video` != "" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
         return array($db->getObjListBySql($sql), $hasmore);
@@ -167,7 +161,7 @@
         $c = $c[0]->c;
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where `video` != "" order by `date` desc';
+        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where `video` != "" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
         return array($db->getObjListBySql($sql), $hasmore);
