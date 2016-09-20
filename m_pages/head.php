@@ -5,7 +5,7 @@
     <div class="right">
         <ul id="menu">
             <li><a href="javascript:void(0);" onclick="$('#catagory').toggle('fast');">更多</a></li>
-            <li><a href="/recommend/" title="微信湾推荐阅读">推荐</a></li>
+            <li><a href="/newest/" title="微信湾最新发布">最新</a></li>
             <li><a href="/hotagree/" title="微信湾点赞热门">点赞</a></li>
             <li><a href="/videos/" title="微信湾视频聚合">视频</a></li>
             <li><a href="/hotread/" title="微信湾热门排行">热门</a></li>
