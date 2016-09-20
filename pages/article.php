@@ -17,7 +17,7 @@
 
     <title><?php echo $article->title;?>--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="<?php echo $article->account_name.','.$article->aid.','.$article->title;?>" />
+    <meta name="keywords" content="<?php echo $article->account_name.','.$article->aid.','.$article->title;?><?php if ($article->keywords) {echo ','.$article->keywords;}?>" />
     <meta name="description" content="<?php echo $article->title.','.$article->account_name.';'.$article->article_desc;?>" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
