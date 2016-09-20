@@ -95,7 +95,9 @@
                     <a href="/">首页</a>
                     <?php
                         if ($_GET['catagory'] == 'all') {
-                            if ($_GET['prefix'] == 'hotread') {
+                            if ($_GET['prefix'] == 'newest') {
+                                echo '><a href="/newest/" title="最新发布文章阅读">最新发布</a>';
+                            } else if ($_GET['prefix'] == 'hotread') {
                                 echo '><a href="/hotread/" title="微信文章热门排行">热门排行</a>';
                             } else if ($_GET['prefix'] == 'recommend') {
                                 echo '><a href="/recommend/" title="微信文章推荐阅读">推荐阅读</a>';
