@@ -60,6 +60,9 @@
                         include '../pages/contents/'.$article->date.'/'.$article->titleid.'.html';
                     ?>
                 </article>
+                <!--WAP版-->
+                <div id="SOHUCS" sid="article-<?php echo $article->articleid?>" ></div>
+                <script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=cysAptWrK&conf=prod_57d72e31d2bd9f9a9b76f5f5ffe57ad4"></script>
             </div>
             <h3>其他文章</h3>
             <ul id="other_article">
