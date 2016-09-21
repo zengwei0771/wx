@@ -32,6 +32,6 @@ def keyword_hot(s):
         for item in r['data']:
             index += item['data']['week_index']
     except Exception, e:
-        print 'search 360 hot index failed: %s' (url, e)
+        print 'search 360 hot index failed: %s, %s' % (url, str(e))
     print index
     return words, index
