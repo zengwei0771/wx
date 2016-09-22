@@ -66,7 +66,7 @@
     }
 
     function get_hot_articles() {
-        $hots = get_redis('HOT::ARTICLES');
+        $hots = get_redis('HOT:ARTICLES');
         if ($hots) {
             return json_decode($hots);
         } else {
@@ -79,7 +79,7 @@
     }
 
     function get_hot_accounts() {
-        $hot_accounts = get_redis('HOT::ACCOUNTS');
+        $hot_accounts = get_redis('HOT:ACCOUNTS');
         if ($hot_accounts) {
             return json_decode($hot_accounts);
         } else {
@@ -162,7 +162,7 @@
     }
 
     function get_hot_videos() {
-        $hot_videos = get_redis('HOT::VIDEOS');
+        $hot_videos = get_redis('HOT:VIDEOS');
         if ($hot_videos) {
             return json_decode($hot_videos);
         } else {
