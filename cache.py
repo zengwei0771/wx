@@ -13,15 +13,19 @@ def put():
     R = redis.Redis(host='127.0.0.1', port=6379, db=1)
     db.connect()
 
+    print 'hot:articles'
     hots = Article.hots(TODAY - timedelta(7))
     R.set('HOT:ARTICLES', json.dumps(hots))
 
+    print 'hot:videos'
     hot_videos = Article.hot_videos(TODAY - timedelta(7))
     R.set('HOT:VIDEOS', json.dumps(hot_videos))
 
+    print 'catagorys'
     catagorys = Article.catagorys(TODAY - timedelta(7))
     R.set('CATAGORYS', json.dumps(catagorys))
 
+    print 'hot:accounts'
     hot_accounts = Account.hots(TODAY - timedelta(3))
     R.set('HOT:ACCOUNTS', json.dumps(hot_accounts))
 
