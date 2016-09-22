@@ -3,6 +3,15 @@
     require_once('db.php');
 
 
+    function get_redis($key) {
+        $redis = new Redis();
+        $redis->connect('localhost', 6379);
+        $redis->select(1);
+        $data = $redis->get($key);
+        $redis->close();
+        return $data;
+    }
+
     function get_articles($catagory, $sortby, $page, $cpp=40) {
         global $db;
         if ($catagory != 'all') {
@@ -45,25 +54,40 @@
     }
 
     function get_catagorys() {
-        global $db;
-        $last7day = date("Y-m-d", strtotime("-7 day"));
-        $sql = 'select `catagoryid`, `catagory`, sum(`index`) as hot from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by hot desc';
-        return $db->getObjListBySql($sql);
+        $catagorys = get_redis('CATAGORYS');
+        if ($catagorys) {
+            return json_decode($catagorys);
+        } else {
+            global $db;
+            $last7day = date("Y-m-d", strtotime("-7 day"));
+            $sql = 'select `catagoryid`, `catagory`, sum(`index`) as hot from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by hot desc';
+            return $db->getObjListBySql($sql);
+        }
     }
 
-    function get_rand_articles() {
-        global $db;
-        $lastday = date("Y-m-d", strtotime("-7 day"));
-        $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 15';
-        $data = $db->getObjListBySql($sql);
-        return $data;
+    function get_hot_articles() {
+        $hots = get_redis('HOT::ARTICLES');
+        if ($hots) {
+            return json_decode($hots);
+        } else {
+            global $db;
+            $lastday = date("Y-m-d", strtotime("-7 day"));
+            $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 15';
+            $data = $db->getObjListBySql($sql);
+            return $data;
+        }
     }
 
     function get_hot_accounts() {
-        global $db;
-        $last7day = date("Y-m-d", strtotime("-3 day"));
-        $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `date`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 15';
-        return $db->getObjListBySql($sql);
+        $hot_accounts = get_redis('HOT::ACCOUNTS');
+        if ($hot_accounts) {
+            return json_decode($hot_accounts);
+        } else {
+            global $db;
+            $last7day = date("Y-m-d", strtotime("-3 day"));
+            $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `date`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 15';
+            return $db->getObjListBySql($sql);
+        }
     }
 
 
@@ -137,21 +161,17 @@
         return array($db->getObjListBySql($sql), $hasmore);
     }
 
-    function get_other_videos() {
-        global $db;
-        $lastday = date("Y-m-d", strtotime("-3 day"));
-        $sql = 'select * from article where `date` > "'.$lastday.'" and `video` != ""';
-        $data = $db->getObjListBySql($sql);
-        $result = Array();
-        if (count($data) > 15) {
-            $dist = count($data) / 15;
+    function get_hot_videos() {
+        $hot_videos = get_redis('HOT::VIDEOS');
+        if ($hot_videos) {
+            return json_decode($hot_videos);
         } else {
-            $dist = 1;
+            global $db;
+            $lastday = date("Y-m-d", strtotime("-7 day"));
+            $sql = 'select * from article where `date` > "'.$lastday.'" and `video` != "" order by `index` desc limit 0, 15';
+            $data = $db->getObjListBySql($sql);
+            return $data;
         }
-        for($i = $dist; $i < count($data); $i+=$dist) {
-            array_push($result, $data[$i]);
-        }
-        return $result;
     }
 
     function get_videos_with_account($page, $cpp=20) {

@@ -7,7 +7,7 @@
     } else {
         list($articles, $hasmore) = get_articles($_GET['catagory'], $_GET['sortby'], $_GET['page']);
     }
-    $rand_articles = get_rand_articles();
+    $rand_articles = get_hot_articles();
     $hot_accounts = get_hot_accounts();
     if ($_GET['catagory'] and $_GET['catagory'] != 'all') {
         $catagory_name = get_catagory_name_by_id($_GET['catagory']);

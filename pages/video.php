@@ -28,8 +28,8 @@
         exit(0);
     }
 
-    $rand_articles = get_rand_articles();
-    $other_videos = get_other_videos();
+    $rand_articles = get_hot_articles();
+    $hot_videos = get_hot_videos();
     $catagorys = get_catagorys();
 ?>
 <!DOCTYPE html>
@@ -66,10 +66,10 @@
         </div>
         <div id="rightbar" class="rightbar">
             <div id="other_video" class="box">
-                <h3>推荐视频</h3>
+                <h3>热门视频</h3>
                 <ul>
                 <?php
-                foreach($other_videos as $ov) {
+                foreach($hot_videos as $ov) {
                     echo '<li><a target="_blank" title="'.$ov->title.'" href="/barticle/'.$ov->titleid.'.html">'.$ov->title.'</a></li>';
                 }
                 ?>

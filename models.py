@@ -24,6 +24,23 @@ class Account(BaseModel):
     name = FixedCharField(max_length=64, null=False)
     desc = CharField(max_length=255)
 
+    @classmethod
+    def hots(cls, since):
+        accounts = {}
+        for a in Article.select().where(Article.date > since):
+            if accounts.get(a.account.aid):
+                accounts[a.account.aid][1] += a.read
+                accounts[a.account.aid][2] += a.agree
+            else:
+                accounts[a.account.aid] = [a.account.name, a.read, a.agree]
+        tops = sorted(accounts.items(), key=lambda x:x[1][1], reverse=True)[:15]
+        return [{
+            'aid':i[0],
+            'account_name':i[1][0],
+            'allread':i[1][1],
+            'allagree':i[1][2]
+        } for i in tops]
+
 
 class Article(BaseModel):
     __table__ = 'article'
@@ -79,6 +96,25 @@ class Article(BaseModel):
                 width=img['width'],
                 height=img['height']
             )
+
+    @classmethod
+    def catagorys(cls, since):
+        catagorys = [i.todict() for i in Article.select(Article.catagoryid, Article.catagory, fn.sum(Article.index).alias('s')).where(Article.date > since).group_by(Article.catagoryid, Article.catagory).order_by(SQL('s desc'))]
+        return catagorys
+
+    @classmethod
+    def hots(cls, since):
+        return [i.todict() for i in Article.select().where(Article.date > since).order_by(Article.index.desc()).limit(15)]
+
+    @classmethod
+    def hot_videos(cls, since):
+        return [i.todict() for i in Article.select().where(Article.date > since).where(SQL('`video` != ""')).order_by(Article.index.desc()).limit(15)]
+
+    def todict(self):
+        r = dict(self._data)
+        if 'date' in r.keys():
+            r['date'] = r['date'].strftime('%Y-%m-%d')
+        return r
 
 
 class Pic(BaseModel):
