@@ -17,8 +17,8 @@
 
     <title><?php echo $article->title;?>--<?php echo $site_name;?></title>
 
-    <meta name="keywords" content="<?php echo $article->account_name.','.$article->aid.','.$article->title;?><?php if ($article->keywords) {echo ','.$article->keywords;}?>" />
-    <meta name="description" content="<?php echo $article->title.','.$article->account_name.';'.$article->article_desc;?>" />
+    <meta name="keywords" content="<?php echo $article->name.','.$article->aid.','.$article->title;?><?php if ($article->keywords) {echo ','.$article->keywords;}?>" />
+    <meta name="description" content="<?php echo $article->title.','.$article->name.';'.$article->article_desc;?>" />
 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="bookmark" type="image/x-icon" /> 
     <link href="/static/favicon.ico" mce_href="/static/favicon.ico" rel="icon" type="image/x-icon" /> 
@@ -55,9 +55,9 @@
                     <?php }?>
                     <div class="account-name">
                     <?php if($article->aid){?>
-                        <a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a>
+                        <a href="/baccount/<?php echo $article->aid;?>/" title="<?php echo $article->name;?>所有文章"><?php echo $article->name;?></a>
                     <?php }else{?>
-                        <a href="" title="<?php echo $article->account_name;?>所有文章"><?php echo $article->account_name;?></a>
+                        <a href="" title="<?php echo $article->name;?>所有文章"><?php echo $article->name;?></a>
                     <?php }?>
                     </div>
                     <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $article->aid;?></div>

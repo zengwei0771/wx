@@ -21,7 +21,7 @@
         }
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid';
+        $sql = 'select *, `desc` as article_desc from article';
         if ($catagory != 'all') {
             $sql .= ' where catagoryid = "'.$catagory.'"';
         }
@@ -37,6 +37,7 @@
         }
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
+        $sql = 'select *, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
         return array($db->getObjListBySql($sql), $hasmore);
     }
 
@@ -47,9 +48,10 @@
         $c = $c[0]->c;
         $hasmore = $c > $page*$cpp;
 
-        $sql = 'select *, account.name as account_name, account.desc as account_desc, article.desc as article_desc from article left join account on account_id = aid where title like "%'.$k.'%" order by `date` desc, `index` desc';
+        $sql = 'select *, `desc` as article_desc from article where title like "%'.$k.'%" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
+        $sql = 'select *, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
         return array($db->getObjListBySql($sql), $hasmore);
     }
 
@@ -93,7 +95,8 @@
 
     function get_article($titleid) {
         global $db;
-        $sql = 'select *, article.desc as article_desc, account.desc as account_desc, account.name as account_name from article left join account on account_id = aid where titleid="'.$titleid.'"';
+        $sql = 'select *, `desc` as article_desc from article where titleid="'.$titleid.'"';
+        $sql = 'select *, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
         $data = $db->getObjListBySql($sql);
         if (count($data) == 0) {
             header('HTTP/1.1 404 Not Found');
