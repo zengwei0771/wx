@@ -33,7 +33,7 @@ class Account(BaseModel):
                 accounts[a.account.aid][2] += a.agree
             else:
                 accounts[a.account.aid] = [a.account.name, a.read, a.agree]
-        tops = sorted(accounts.items(), key=lambda x:x[1][1], reverse=True)[:15]
+        tops = sorted(accounts.items(), key=lambda x:x[1][1], reverse=True)[:10]
         return [{
             'aid':i[0],
             'account_name':i[1][0],
@@ -104,11 +104,11 @@ class Article(BaseModel):
 
     @classmethod
     def hots(cls, since):
-        return [i.todict() for i in Article.select().where(Article.date > since).order_by(Article.index.desc()).limit(15)]
+        return [i.todict() for i in Article.select().where(Article.date > since).order_by(Article.index.desc()).limit(10)]
 
     @classmethod
     def hot_videos(cls, since):
-        return [i.todict() for i in Article.select().where(Article.date > since).where(SQL('`video` != ""')).order_by(Article.index.desc()).limit(15)]
+        return [i.todict() for i in Article.select().where(Article.date > since).where(SQL('`video` != ""')).order_by(Article.index.desc()).limit(10)]
 
     def todict(self):
         r = dict(self._data)
