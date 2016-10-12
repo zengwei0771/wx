@@ -63,11 +63,11 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
-            <div style="margin-bottom:20px;padding: 0 30px;">
+            <div class="ad" style="margin-bottom:20px;">
                 <script type="text/javascript">
                     var sogou_ad_id=698655;
                     var sogou_ad_height=200;
-                    var sogou_ad_width=300;
+                    var sogou_ad_width=360;
                 </script>
                 <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
             </div>
