@@ -30,7 +30,8 @@ def keyword_hot(s):
     try:
         r = requests.get(url, headers={'User-Agent':UA}, timeout=TO).json()
         for item in r['data']:
-            index += item['data']['week_index']
+            if type(item['data']['week_index']) == int:
+                index += item['data']['week_index']
     except Exception, e:
         print 'search 360 hot index failed: %s, %s' % (url, str(e))
     print index
