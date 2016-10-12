@@ -73,7 +73,7 @@
                 ?>
                 </ul>
             </div>
-            <div style="margin-bottom:20px;padding: 10px 9px;">
+            <div style="margin-bottom:20px;padding: 0 30px;">
                 <script type="text/javascript">
                     var sogou_ad_id=698655;
                     var sogou_ad_height=200;
