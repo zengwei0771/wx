@@ -5,7 +5,7 @@
     <li class="split"></li>
     <li><a href="/videos/" title="微信文章视频合集">视&nbsp;&nbsp;&nbsp;频</a></li>
 </ul>
-<div>
+<div style="margin-top: 20px">
     <script type="text/javascript">
     var sogou_ad_id=698680;
     var sogou_ad_height=160;
