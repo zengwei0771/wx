@@ -74,6 +74,14 @@
                 </ul>
             </div>
             <div class="box">
+                <script type="text/javascript">
+                    var sogou_ad_id=698655;
+                    var sogou_ad_height=200;
+                    var sogou_ad_width=300;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+            </div>
+            <div class="box">
                 <h3>热门公众号</h3>
                 <label class="hot-account-title"><span>公众号</span><span>阅读</span><span>点赞</span></label>
                 <ul class="hot-account-list">
