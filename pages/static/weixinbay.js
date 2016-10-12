@@ -14,11 +14,9 @@ function pagescroll(box) {
             JQ('#'+box).fadeIn();
         }
         JQ('#gotop').fadeIn();
-        JQ('.ad').css({'position': 'fixed'});
     } else { 
         JQ('#'+box).css({'position': 'relative'});
         JQ('#gotop').fadeOut();
-        JQ('.ad').css({'position': 'relative'});
     } 
   } 
 }
