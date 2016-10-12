@@ -63,6 +63,14 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
+            <div style="margin-bottom:20px;padding: 0 30px;">
+                <script type="text/javascript">
+                    var sogou_ad_id=698655;
+                    var sogou_ad_height=200;
+                    var sogou_ad_width=300;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+            </div>
             <div id="hot_read" class="box">
                 <h3>推荐热点</h3>
                 <ul>
@@ -72,14 +80,6 @@
                 }
                 ?>
                 </ul>
-            </div>
-            <div style="margin-bottom:20px;padding: 0 30px;">
-                <script type="text/javascript">
-                    var sogou_ad_id=698655;
-                    var sogou_ad_height=200;
-                    var sogou_ad_width=300;
-                </script>
-                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
             </div>
             <div class="box">
                 <h3>热门公众号</h3>
