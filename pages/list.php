@@ -63,7 +63,7 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
-            <div id="ad1" style="position:fixed;margin-bottom:20px;">
+            <div id="ad1" style="margin-bottom:20px;">
                 <script type="text/javascript">
                     var sogou_ad_id=698655;
                     var sogou_ad_height=200;
