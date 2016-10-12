@@ -74,7 +74,7 @@
         } else {
             global $db;
             $lastday = date("Y-m-d", strtotime("-7 day"));
-            $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 15';
+            $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 10';
             $data = $db->getObjListBySql($sql);
             return $data;
         }
@@ -87,7 +87,7 @@
         } else {
             global $db;
             $last7day = date("Y-m-d", strtotime("-3 day"));
-            $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `date`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 15';
+            $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `date`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 10';
             return $db->getObjListBySql($sql);
         }
     }
@@ -109,13 +109,13 @@
 
     function get_account_articles($accountid) {
         global $db;
-        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc, `index` desc limit 0, 15';
+        $sql = 'select * from article where account_id = "'.$accountid.'" order by `date` desc, `index` desc limit 0, 10';
         return $db->getObjListBySql($sql);
     }
 
     function get_more_articles($articleid) {
         global $db;
-        $sql = 'select * from article where articleid > "'.$articleid.'" limit 0, 15';
+        $sql = 'select * from article where articleid > "'.$articleid.'" limit 0, 10';
         return $db->getObjListBySql($sql);
     }
 
@@ -171,7 +171,7 @@
         } else {
             global $db;
             $lastday = date("Y-m-d", strtotime("-7 day"));
-            $sql = 'select * from article where `date` > "'.$lastday.'" and `video` != "" order by `index` desc limit 0, 15';
+            $sql = 'select * from article where `date` > "'.$lastday.'" and `video` != "" order by `index` desc limit 0, 10';
             $data = $db->getObjListBySql($sql);
             return $data;
         }
