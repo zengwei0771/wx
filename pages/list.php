@@ -73,7 +73,7 @@
                 ?>
                 </ul>
             </div>
-            <div class="box">
+            <div style="margin-bottom:20px;padding: 10px 9px;">
                 <script type="text/javascript">
                     var sogou_ad_id=698655;
                     var sogou_ad_height=200;
