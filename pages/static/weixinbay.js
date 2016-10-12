@@ -12,10 +12,14 @@ function pagescroll(box) {
         if (JQ('#'+box).css('position') == 'relative') {
             JQ('#'+box).css({'position': 'fixed', 'display': 'none'});
             JQ('#'+box).fadeIn();
+            JQ('#ad1').css({'display': 'none'});
         }
         JQ('#gotop').fadeIn();
     } else { 
-        JQ('#'+box).css({'position': 'relative'});
+        if (JQ('#'+box).css('position') == 'fixed') {
+          JQ('#'+box).css({'position': 'relative'});
+          JQ('#ad1').css({'display': 'block'});
+        }
         JQ('#gotop').fadeOut();
     } 
   } 
