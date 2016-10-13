@@ -12,7 +12,7 @@ import sys
 COUNT = 4000
 CATAGORY_COUNT = 1000
 VIDEO_COUNT = 1000
-EXPIRE = 1800
+EXPIRE = 2400
 
 
 def set_content(R, a):
