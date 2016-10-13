@@ -8,6 +8,31 @@ from datetime import datetime, timedelta
 import json
 
 
+COUNT = 4000
+EXPIRE = 1800
+
+
+def set_content(R, a):
+    article_key = 'ARTICLE:%d'
+    if not R.get(article_key % a.articleid):
+        R.setex(article_key % a.articleid, json.dumps({
+            'titleid': a.titleid,
+            'title': a.title,
+            'account_id': a.account.aid,
+            'account_name': a.account.name,
+            'article_desc': a.desc,
+            'cover': a.cover,
+            'date': a.date.strftime('%Y-%m-%d'),
+            'read': a.read,
+            'agree': a.agree,
+            'vote': a.vote,
+            'keywords': a.keywords
+        }), EXPIRE)
+    else:
+        R.expire(article_key % a.articleid, EXPIRE)
+
+
+
 def put():
     TODAY = datetime.now().date()
     R = redis.Redis(host='127.0.0.1', port=6379, db=1)
@@ -22,12 +47,50 @@ def put():
     R.set('HOT:VIDEOS', json.dumps(hot_videos))
 
     print 'catagorys'
-    catagorys = Article.catagorys(TODAY - timedelta(7))
+    catagorys = Article.catagorys(None)
     R.set('CATAGORYS', json.dumps(catagorys))
 
     print 'hot:accounts'
     hot_accounts = Account.hots(TODAY - timedelta(3))
     R.set('HOT:ACCOUNTS', json.dumps(hot_accounts))
+
+    print 'count:all'
+    ct = Article.select().count()
+    R.set('COUNT:ALL', ct)
+    for c in catagorys:
+        print 'count:%s' % c['catagoryid'].upper()
+        ct = Article.select().where(Article.catagoryid == c['catagoryid']).count()
+        R.set('COUNT:%s' % c['catagoryid'].upper(), ct)
+
+    for t in ['hot', 'newest', 'hotread', 'hotagree']:
+        print 'list:%s' % t
+        ls = []
+        k = 'LIST:%s' % t.upper()
+        seler = Article.select().order_by(Article.date.desc())
+        if t == 'hot':
+            seler = seler.order_by(Article.index.desc())
+        elif t == 'hotread':
+            seler = seler.order_by(Article.read.desc())
+        elif t == 'hotagree':
+            seler = seler.order_by(Article.agree.desc())
+        seler = seler.limit(COUNT)
+        for a in seler:
+            ls.append(a.articleid)
+            set_content(R, a)
+        R.delete(k)
+        [R.lpush(k, i) for i in ls[::-1]]
+
+    for c in catagorys:
+        print 'list:%s' % c['catagoryid']
+        ls = []
+        k = 'LIST:%s' % c['catagoryid'].upper()
+        for a in Article.select().where(Article.catagoryid == c['catagoryid'])\
+                .order_by(Article.date.desc()).order_by(Article.index.desc())\
+                .limit(COUNT):
+            ls.append(a.articleid)
+            set_content(R, a)
+        R.delete(k)
+        [R.lpush(k, i) for i in ls[::-1]]
 
     db.close()
 

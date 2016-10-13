@@ -3,23 +3,47 @@
     require_once('db.php');
 
 
-    function get_redis($key) {
-        $redis = new Redis();
-        $redis->connect('localhost', 6379);
-        $redis->select(1);
-        $data = $redis->get($key);
-        $redis->close();
-        return $data;
-    }
+    $redis = new Redis();
+    $redis->connect('localhost', 6379);
+    $redis->select(1);
+
 
     function get_articles($catagory, $sortby, $page, $cpp=40) {
-        global $db;
-        if ($catagory != 'all') {
-            $c = $db->getCountByAtr('article', 'catagoryid', $catagory);
-        } else {
-            $c = $db->getCountByAtr('article');
+        global $db, $redis;
+        $c = $redis->get('COUNT:'.strtoupper($catagory));
+        if (!$c) {
+            if ($catagory != 'all') {
+                $c = $db->getCountByAtr('article', 'catagoryid', $catagory);
+            } else {
+                $c = $db->getCountByAtr('article');
+            }
         }
         $hasmore = $c > $page*$cpp;
+
+        $start = ($page-1) * $cpp;
+        $end = $start + $cpp - 1;
+
+        if ($page < 100) {
+            if ($catagory != 'all') {
+                $l = $redis->lRange('LIST:'.strtoupper($catagory), $start, $end);
+            } else if ($sortby == 'hot') {
+                $l = $redis->lRange('LIST:HOT', $start, $end);
+            } else if ($sortby == 'read') {
+                $l = $redis->lRange('LIST:HOTREAD', $start, $end);
+            } else if ($sortby == 'agree') {
+                $l = $redis->lRange('LIST:HOTAGREE', $start, $end);
+            } else {
+                $l = $redis->lRange('LIST:NEWEST', $start, $end);
+            }
+            if ($l) {
+                $data = array();
+                foreach ($l as $id) {
+                    $article = $redis->get('ARTICLE:'.$id);
+                    array_push($data, json_decode($article));
+                }
+                return array($data, $hasmore);
+            }
+        }
 
         $sql = 'select *, `desc` as article_desc from article';
         if ($catagory != 'all') {
@@ -35,7 +59,6 @@
         } else if ($sortby == 'agreeratio') {
             $sql .= ', `agree`/`read` desc';
         }
-        $start = ($page-1) * $cpp;
         $sql .= ' limit '.$start.', '.$cpp;
         $sql = 'select *, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
         return array($db->getObjListBySql($sql), $hasmore);
@@ -56,11 +79,11 @@
     }
 
     function get_catagorys() {
-        $catagorys = get_redis('CATAGORYS');
+        global $db, $redis;
+        $catagorys = $redis->get('CATAGORYS');
         if ($catagorys) {
             return json_decode($catagorys);
         } else {
-            global $db;
             $last7day = date("Y-m-d", strtotime("-7 day"));
             $sql = 'select `catagoryid`, `catagory`, sum(`index`) as hot from `article` where `date` > "'.$last7day.'" group by `catagoryid`, `catagory` order by hot desc';
             return $db->getObjListBySql($sql);
@@ -68,11 +91,11 @@
     }
 
     function get_hot_articles() {
-        $hots = get_redis('HOT:ARTICLES');
+        global $db, $redis;
+        $hots = $redis->get('HOT:ARTICLES');
         if ($hots) {
             return json_decode($hots);
         } else {
-            global $db;
             $lastday = date("Y-m-d", strtotime("-7 day"));
             $sql = 'select * from article where `date` >= "'.$lastday.'" order by `index` desc limit 0, 10';
             $data = $db->getObjListBySql($sql);
@@ -81,11 +104,11 @@
     }
 
     function get_hot_accounts() {
-        $hot_accounts = get_redis('HOT:ACCOUNTS');
+        global $db, $redis;
+        $hot_accounts = $redis->get('HOT:ACCOUNTS');
         if ($hot_accounts) {
             return json_decode($hot_accounts);
         } else {
-            global $db;
             $last7day = date("Y-m-d", strtotime("-3 day"));
             $sql = 'select aid, `name` as account_name, sum(`read`) as allread, sum(agree) as allagree from article left join account on account_id = aid where `date`>"'.$last7day.'" group by account_id order by allagree desc limit 0, 10';
             return $db->getObjListBySql($sql);
@@ -165,11 +188,11 @@
     }
 
     function get_hot_videos() {
-        $hot_videos = get_redis('HOT:VIDEOS');
+        global $db, $redis;
+        $hot_videos = $redis->get('HOT:VIDEOS');
         if ($hot_videos) {
             return json_decode($hot_videos);
         } else {
-            global $db;
             $lastday = date("Y-m-d", strtotime("-7 day"));
             $sql = 'select * from article where `date` > "'.$lastday.'" and `video` != "" order by `index` desc limit 0, 10';
             $data = $db->getObjListBySql($sql);

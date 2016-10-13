@@ -99,7 +99,11 @@ class Article(BaseModel):
 
     @classmethod
     def catagorys(cls, since):
-        catagorys = [i.todict() for i in Article.select(Article.catagoryid, Article.catagory, fn.sum(Article.index).alias('s')).where(Article.date > since).group_by(Article.catagoryid, Article.catagory).order_by(SQL('s desc'))]
+        seler = Article.select(Article.catagoryid, Article.catagory, fn.sum(Article.index).alias('s'))
+        if since:
+            seler = seler.where(Article.date > since)
+        seler = seler.group_by(Article.catagoryid, Article.catagory).order_by(SQL('s desc'))
+        catagorys = [i.todict() for i in seler]
         return catagorys
 
     @classmethod
