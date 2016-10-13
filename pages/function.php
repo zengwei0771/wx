@@ -60,7 +60,7 @@
             $sql .= ', `agree`/`read` desc';
         }
         $sql .= ' limit '.$start.', '.$cpp;
-        $sql = 'select *, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
+        $sql = 'select *, account.desc as account_desc, account.aid as account_id, account.desc as account_desc from ('.$sql.') t left join account on t.account_id = account.aid';
         return array($db->getObjListBySql($sql), $hasmore);
     }
 

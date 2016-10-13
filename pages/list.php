@@ -128,7 +128,7 @@
                     if ($a->account_id) {
                         echo '/baccount/'.$a->account_id.'/';
                     }
-                    echo '" title="微信公众号'.$a->name.'">@'.$a->name.'</a><span>阅读('.$a->read.')</span><a class="agree" href="javascript:void(0);" onclick="agree(this)" titleid="'.$a->titleid.'"><img src="/static/muzhi.svg"/><span>'.$a->agree.'</span></a></footer></article>';
+                    echo '" title="微信公众号'.$a->account_name.'">@'.$a->account_name.'</a><span>阅读('.$a->read.')</span><a class="agree" href="javascript:void(0);" onclick="agree(this)" titleid="'.$a->titleid.'"><img src="/static/muzhi.svg"/><span>'.$a->agree.'</span></a></footer></article>';
                 }
                 ?>
                 <div class="next-page">
