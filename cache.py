@@ -48,7 +48,7 @@ def put():
     R.set('HOT:VIDEOS', json.dumps(hot_videos))
 
     print 'catagorys'
-    catagorys = Article.catagorys(None)
+    catagorys = Article.catagorys(TODAY - timedelta(7))
     R.set('CATAGORYS', json.dumps(catagorys))
 
     print 'hot:accounts'
@@ -67,14 +67,17 @@ def put():
         print 'list:%s' % t
         ls = []
         k = 'LIST:%s' % t.upper()
-        seler = Article.select().order_by(Article.date.desc())
+        seler = Article.select()
         if t == 'hot':
-            seler = seler.order_by(Article.index.desc())
+            seler = seler.order_by(Article.date.desc(), Article.index.desc())
         elif t == 'hotread':
-            seler = seler.order_by(Article.read.desc())
+            seler = seler.order_by(Article.date.desc(), Article.read.desc())
         elif t == 'hotagree':
-            seler = seler.order_by(Article.agree.desc())
+            seler = seler.order_by(Article.date.desc(), Article.agree.desc())
+        else:
+            seler = seler.order_by(Article.date.desc())
         seler = seler.limit(COUNT)
+        print seler
         for a in seler:
             ls.append(a.articleid)
             set_content(R, a)
