@@ -23,7 +23,7 @@
         $start = ($page-1) * $cpp;
         $end = $start + $cpp - 1;
 
-        if ($page < 100) {
+        if ($page <= 25 || ($catagory == 'all' && $page <= 100)) {
             if ($catagory != 'all') {
                 $l = $redis->lRange('LIST:'.strtoupper($catagory), $start, $end);
             } else if ($sortby == 'hot') {

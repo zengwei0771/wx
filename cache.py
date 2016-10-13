@@ -9,6 +9,7 @@ import json
 
 
 COUNT = 4000
+CATAGORY_COUNT = 1000
 EXPIRE = 1800
 
 
@@ -86,7 +87,7 @@ def put():
         k = 'LIST:%s' % c['catagoryid'].upper()
         for a in Article.select().where(Article.catagoryid == c['catagoryid'])\
                 .order_by(Article.date.desc()).order_by(Article.index.desc())\
-                .limit(COUNT):
+                .limit(CATAGORY_COUNT):
             ls.append(a.articleid)
             set_content(R, a)
         R.delete(k)
