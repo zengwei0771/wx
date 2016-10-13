@@ -6,10 +6,12 @@ import redis
 from models import db, Article, Account
 from datetime import datetime, timedelta
 import json
+import sys
 
 
 COUNT = 4000
 CATAGORY_COUNT = 1000
+VIDEO_COUNT = 500
 EXPIRE = 1800
 
 
@@ -27,7 +29,8 @@ def set_content(R, a):
             'read': a.read,
             'agree': a.agree,
             'vote': a.vote,
-            'keywords': a.keywords
+            'keywords': a.keywords,
+            'video': a.video,
         }), EXPIRE)
     else:
         R.expire(article_key % a.articleid, EXPIRE)
@@ -62,6 +65,9 @@ def put():
         print 'count:%s' % c['catagoryid'].upper()
         ct = Article.select().where(Article.catagoryid == c['catagoryid']).count()
         R.set('COUNT:%s' % c['catagoryid'].upper(), ct)
+    print 'count:video'
+    ct = Article.select().where(Article.video != '').count()
+    R.set('COUNT:VIDEO', ct)
 
     for t in ['hot', 'newest', 'hotread', 'hotagree']:
         print 'list:%s' % t
@@ -83,6 +89,15 @@ def put():
         R.delete(k)
         [R.lpush(k, i) for i in ls[::-1]]
 
+    print 'list:video'
+    ls = []
+    k = 'LIST:VIDEO'
+    for a in Article.select().where(Article.video != '').order_by(Article.date.desc()).limit(VIDEO_COUNT):
+        ls.append(a.articleid)
+        set_content(R, a)
+    R.delete(k)
+    [R.lpush(k, i) for i in ls[::-1]]
+
     for c in catagorys:
         print 'list:%s' % c['catagoryid']
         ls = []
@@ -97,6 +112,15 @@ def put():
 
     db.close()
 
+def reset():
+    R = redis.Redis(host='127.0.0.1', port=6379, db=1)
+    for k in R.keys():
+        print 'clear %s' % k
+        R.delete(k)
+
 
 if __name__ == '__main__':
-    put()
+    if 'reset' in sys.argv:
+        reset()
+    else:
+        put()

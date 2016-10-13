@@ -175,11 +175,29 @@
     }
 
     function get_videos($page, $cpp=5) {
-        global $db;
-        $sql = 'select count(*) as c from article where `video` != ""';
-        $c = $db->getObjListBySql($sql);
-        $c = $c[0]->c;
+        global $db, $redis;
+        $c = $redis->get('COUNT:VIDEO');
+        if (!$c) {
+            $sql = 'select count(*) as c from article where `video` != ""';
+            $c = $db->getObjListBySql($sql);
+            $c = $c[0]->c;
+        }
         $hasmore = $c > $page*$cpp;
+
+        $start = ($page-1) * $cpp;
+        $end = $start + $cpp - 1;
+
+        if ($page <= 100) {
+            $l = $redis->lRange('LIST:VIDEO', $start, $end);
+            if ($l) {
+                $data = array();
+                foreach ($l as $id) {
+                    $article = $redis->get('ARTICLE:'.$id);
+                    array_push($data, json_decode($article));
+                }
+                return array($data, $hasmore);
+            }
+        }
 
         $sql = 'select * from article where `video` != "" order by `date` desc, `index` desc';
         $start = ($page-1) * $cpp;

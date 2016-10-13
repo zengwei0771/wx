@@ -517,7 +517,6 @@ ul.address li a {
     display: block;
     height: 40px;
     line-height: 40px;
-    margin-bottom: 8px;
     font-family: monospace;
     font-size: 20px;
     color: black;
@@ -528,6 +527,13 @@ ul.address li a {
 }
 .video a:hover {
     color: #62b934;
+}
+.video span {
+    display: block;
+    font-size: 11px;
+    color: #66b944;
+    line-height: 20px;
+    height: 30px;
 }
 
 

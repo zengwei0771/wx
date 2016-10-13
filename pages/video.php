@@ -13,7 +13,7 @@
             }
             $src .= 'auto=0';
         }
-       $videos_html .= '<div class="video"><a target="_blank" title="'.$v->title.'" href="/barticle/'.$v->titleid.'.html">'.$v->title.'</a><iframe allowfullscreen="" vidtype="1" frameborder="0" height="480" width="640" src="'.$src.'" style="z-index:1;"></iframe></div>';
+       $videos_html .= '<div class="video"><a target="_blank" title="'.$v->title.'" href="/barticle/'.$v->titleid.'.html">'.$v->title.'</a><span>'.$v->date.'</span><iframe allowfullscreen="" vidtype="1" frameborder="0" height="480" width="640" src="'.$src.'" style="z-index:1;"></iframe></div>';
     }
     $videos_html .= '<div class="next-page">';
     if ($hasmore) {
