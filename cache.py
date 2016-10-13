@@ -88,7 +88,7 @@ def put():
         ls = []
         k = 'LIST:%s' % c['catagoryid'].upper()
         for a in Article.select().where(Article.catagoryid == c['catagoryid'])\
-                .order_by(Article.date.desc()).order_by(Article.index.desc())\
+                .order_by(Article.date.desc(), Article.index.desc())\
                 .limit(CATAGORY_COUNT):
             ls.append(a.articleid)
             set_content(R, a)
