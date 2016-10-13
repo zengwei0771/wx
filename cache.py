@@ -77,7 +77,6 @@ def put():
         else:
             seler = seler.order_by(Article.date.desc())
         seler = seler.limit(COUNT)
-        print seler
         for a in seler:
             ls.append(a.articleid)
             set_content(R, a)
