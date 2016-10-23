@@ -42,7 +42,7 @@
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
-        window.onscroll = pagescroll('hot_read');
+        window.onscroll = pagescroll('ad1');
         function agree(self) {
             if ($(self).attr('hasagree') == undefined) {
                 $(self).attr('hasagree', 'hasagree');
@@ -63,6 +63,14 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
+            <div id="ad1" style="margin-bottom:20px;">
+                <script type="text/javascript">
+                    var sogou_ad_id=698655;
+                    var sogou_ad_height=300;
+                    var sogou_ad_width=360;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+            </div>
             <div id="hot_read" class="box">
                 <h3>推荐热点</h3>
                 <ul>
@@ -72,14 +80,6 @@
                 }
                 ?>
                 </ul>
-            </div>
-            <div id="ad1" style="margin-bottom:20px;">
-                <script type="text/javascript">
-                    var sogou_ad_id=698655;
-                    var sogou_ad_height=200;
-                    var sogou_ad_width=360;
-                </script>
-                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
             </div>
             <div class="box">
                 <h3>热门公众号</h3>

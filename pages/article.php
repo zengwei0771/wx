@@ -30,7 +30,7 @@
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         var JQ = jQuery;
-        window.onscroll = pagescroll('account_detail');
+        window.onscroll = pagescroll('ad1');
         JQ(function() {
             setTimeout(function() {
                 JQ.post('/daction/read/<?php echo $article->titleid;?>');
@@ -47,6 +47,14 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
+            <div id="ad1" style="margin-bottom:20px;">
+                <script type="text/javascript">
+                    var sogou_ad_id=698655;
+                    var sogou_ad_height=300;
+                    var sogou_ad_width=360;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+            </div>
             <div id="account_detail" class="box">
                 <h3>公众号信息</h3>
                 <div>
@@ -71,14 +79,6 @@
                 }
                 ?>
                 </ul>
-            </div>
-            <div id="ad1" style="margin-bottom:20px;">
-                <script type="text/javascript">
-                    var sogou_ad_id=698655;
-                    var sogou_ad_height=200;
-                    var sogou_ad_width=360;
-                </script>
-                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
             </div>
             <div id="" class="box">
                 <h3>随机推荐</h3>

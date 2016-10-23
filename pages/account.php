@@ -28,7 +28,7 @@
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
-        window.onscroll = pagescroll('account_detail');
+        window.onscroll = pagescroll('ad1');
     </script>
 </head>
 <body>
@@ -40,6 +40,14 @@
             <?php include 'leftnavi.php';?>
         </div>
         <div id="rightbar" class="rightbar">
+            <div id="ad1" style="margin-bottom:20px;">
+                <script type="text/javascript">
+                    var sogou_ad_id=698655;
+                    var sogou_ad_height=200;
+                    var sogou_ad_width=360;
+                </script>
+                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+            </div>
             <div id="account_detail" class="box">
                 <h3>公众号信息</h3>
                 <div>
@@ -56,14 +64,6 @@
                     <div class="account-id"><strong>微信号:</strong>&nbsp;<?php echo $account->aid;?></div>
                     <div class="account-desc"><strong>介&nbsp;绍:</strong>&nbsp;<?php echo $account->desc;?></div>
                 </div>
-            </div>
-            <div id="ad1" style="margin-bottom:20px;">
-                <script type="text/javascript">
-                    var sogou_ad_id=698655;
-                    var sogou_ad_height=200;
-                    var sogou_ad_width=360;
-                </script>
-                <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
             </div>
             <div class="box">
                 <h3>热门公众号</h3>
