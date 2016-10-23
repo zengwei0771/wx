@@ -30,7 +30,6 @@
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
         var JQ = jQuery;
-        window.onscroll = pagescroll('ad1');
         JQ(function() {
             setTimeout(function() {
                 JQ.post('/daction/read/<?php echo $article->titleid;?>');

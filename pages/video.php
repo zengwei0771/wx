@@ -53,7 +53,6 @@
     <script src="/static/jquery-3.1.0.min.js" language="JavaScript"></script>
     <script src="/static/weixinbay.js" language="JavaScript"></script>
     <script>
-        window.onscroll = pagescroll('ad1');
     </script>
 </head>
 <body>
