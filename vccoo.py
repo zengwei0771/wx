@@ -23,8 +23,10 @@ def pull_vccoo():
     db.connect()
     r = requests.get(INDEX_URL, headers={'User-Agent':UA}, timeout=TO)
     dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
-    for li in dom.find('div', class_='side-menu').findAll('li'):
+    for li in dom.find('div', class_='navContainer').findAll('li'):
         list_url = li.find('a').get('href')
+        if list_url == '/':
+            continue
         print 'list url: ' + list_url
         out = False
         for i in range(1, 3):
