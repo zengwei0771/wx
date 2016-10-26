@@ -56,6 +56,9 @@ def pull_vccoo():
                     if line.strip().startswith('var s = "http'):
                         source = line.strip()[9:-2]
                         break
+                if not source:
+                    '\tcat not get source'
+                    continue
                 print 'source: ' + source
                 if source:
                     arinfo = WX.article_info(source)
