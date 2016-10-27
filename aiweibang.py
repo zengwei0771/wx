@@ -74,4 +74,5 @@ def pull(t):
 if __name__ == '__main__':
     t = datetime.now()
     for i in range(1, 4):
+        print t.strftime('%Y-%m-%d')
         pull(t-timedelta(i))

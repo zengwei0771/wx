@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from random import randint
 from wx import WX
 import time
-from common import UA, TO
+from common import UA, TO, req
 import shortuuid
 
 
@@ -21,7 +21,7 @@ INDEX_URL = 'http://www.vccoo.com/'
 
 def pull_vccoo():
     db.connect()
-    r = requests.get(INDEX_URL, headers={'User-Agent':UA}, timeout=TO)
+    r = req(INDEX_URL)
     dom = BeautifulSoup(r.content, "html5lib", from_encoding="UTF-8")
     for li in dom.find('div', class_='navContainer').findAll('li'):
         list_url = li.find('a').get('href')

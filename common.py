@@ -6,6 +6,8 @@ import os
 from hashlib import md5
 import jieba
 import requests
+import traceback
+import time
 
 
 UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -36,3 +38,18 @@ def keyword_hot(s):
         print 'search 360 hot index failed: %s, %s' % (url, str(e))
     print index
     return words, index
+
+
+def req(url, params={}, cookies={}):
+    retry = 3
+    while retry > 0:
+        try:
+            r = requests.get(url, params=params, cookies=cookies,
+                             headers={'User-Agent':UA}, timeout=TO)
+            time.sleep(3)
+            return r
+        except Exception, e:
+            traceback.print_exc()
+            time.sleep(10)
+        retry -= 1
+    return None
