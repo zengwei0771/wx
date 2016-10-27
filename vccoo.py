@@ -30,7 +30,7 @@ def pull_vccoo():
         print 'list url: ' + list_url
         out = False
         for i in range(1, 3):
-            lr = requests.get('%s&page=%d' % (list_url, i), headers={'User-Agent':UA}, timeout=TO)
+            lr = req('%s&page=%d' % (list_url, i))
             ldom = BeautifulSoup(lr.content, "html5lib", from_encoding="UTF-8")
             catagory = ldom.find('div', class_='crumbs').find('span', class_='last').text.strip()
             if not catagory:
@@ -50,7 +50,7 @@ def pull_vccoo():
 
                 article_url = a.get('href')
                 print 'article_url: ' + article_url
-                ar = requests.get(article_url, headers={'User-Agent':UA}, timeout=TO)
+                ar = req(article_url)
                 source = None
                 for line in ar.content.split('\n'):
                     if line.strip().startswith('var s = "http'):
