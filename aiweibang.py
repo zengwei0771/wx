@@ -15,18 +15,19 @@ from wx import WX
 import time
 from common import UA, TO, write_content
 import shortuuid
+from datetime import datetime, timedelta
 
 
-URL = 'http://top.aiweibang.com/article/daily/class?k=%d&t='
+URL = 'http://top.aiweibang.com/article/daily/class?k=%d&t=%s'
 
 
-def pull():
+def pull(t):
     db.connect()
     for i in range(1, 60):
         r = None
         for retry in range(3):
             try:
-                r = requests.get(URL % i, headers={'User-Agent':UA}, timeout=TO)
+                r = requests.get(URL % (i, t.strftime('%Y-%m-%d')), headers={'User-Agent':UA}, timeout=TO)
                 break
             except Exception, e:
                 print e
@@ -71,4 +72,6 @@ def pull():
 
 
 if __name__ == '__main__':
-    pull()
+    t = datetime.now()
+    for i in range(1, 4):
+        pull(t-timedelta(i))
