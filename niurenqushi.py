@@ -34,6 +34,8 @@ def pull():
         if r is None:
             continue
         for item in r['item']:
+            print item
+            break
             title = WX.filter_emoji(item['Title'])
             if Article.select().where(Article.title == title):
                 print title, 'existed'
